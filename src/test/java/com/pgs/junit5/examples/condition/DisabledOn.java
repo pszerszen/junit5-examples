@@ -7,12 +7,13 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.time.DayOfWeek;
 
 @Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@ExtendWith(DisabledOnFridayCondition.class)
-public @interface DisabledOnFriday {
+@ExtendWith(DisabledOnCondition.class)
+public @interface DisabledOn {
 
-    String value() default "";
+    DayOfWeek[] value() default {DayOfWeek.FRIDAY};
 }
