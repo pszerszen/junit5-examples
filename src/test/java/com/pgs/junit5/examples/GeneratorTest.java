@@ -1,6 +1,6 @@
 package com.pgs.junit5.examples;
 
-import com.pgs.junit5.examples.callback.Benchmark;
+import com.pgs.junit5.examples.extensions.callback.Benchmark;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package com.pgs.junit5.examples.callback;
+package com.pgs.junit5.examples.extensions.callback;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;

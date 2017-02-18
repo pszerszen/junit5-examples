@@ -1,4 +1,4 @@
-package com.pgs.junit5.examples.condition;
+package com.pgs.junit5.examples.extensions.condition;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.extension.ConditionEvaluationResult;

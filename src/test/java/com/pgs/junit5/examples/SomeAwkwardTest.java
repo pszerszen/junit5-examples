@@ -1,7 +1,7 @@
 package com.pgs.junit5.examples;
 
-import com.pgs.junit5.examples.callback.Benchmark;
-import com.pgs.junit5.examples.condition.DisabledOn;
+import com.pgs.junit5.examples.extensions.callback.Benchmark;
+import com.pgs.junit5.examples.extensions.condition.DisabledOn;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 
