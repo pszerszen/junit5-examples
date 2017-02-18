@@ -1,9 +1,11 @@
 package com.pgs.junit5.examples;
 
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Log4j2
 public class E01NewAssertEqualsOrderTest {
 
     @Test
@@ -32,7 +34,7 @@ public class E01NewAssertEqualsOrderTest {
                     .append(" 3 differences")
                     .toString();
         } finally {
-            System.out.println("assertion message has been computed. it was hard work.");
+            log.debug("assertion message has been computed. it was hard work.");
         }
     }
 }

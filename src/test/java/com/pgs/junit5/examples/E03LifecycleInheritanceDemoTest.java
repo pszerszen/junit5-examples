@@ -1,5 +1,6 @@
 package com.pgs.junit5.examples;
 
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -7,31 +8,32 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+@Log4j2
 public class E03LifecycleInheritanceDemoTest {
 
     @BeforeAll
     public static void beforeAll() {
-        System.out.println("beforeAll");
+        log.debug("beforeAll");
     }
 
     @BeforeEach
     public void beforeEach() {
-        System.out.println("beforeEach");
+        log.debug("beforeEach");
     }
 
     @AfterEach
     public void afterEach() {
-        System.out.println("afterEach");
+        log.debug("afterEach");
     }
 
     @AfterAll
     public static void afterAll() {
-        System.out.println("afterAll");
+        log.debug("afterAll");
     }
 
     @Test
     void test() {
-        System.out.println("testing");
+        log.debug("testing");
     }
 
     @Nested
@@ -39,17 +41,17 @@ public class E03LifecycleInheritanceDemoTest {
 
         @BeforeEach
         public void beforeEach() {
-            System.out.println("\tnested beforeEach");
+            log.debug("\tnested beforeEach");
         }
 
         @AfterEach
         public void afterEach() {
-            System.out.println("\tnested afterEach");
+            log.debug("\tnested afterEach");
         }
 
         @Test
         void test() {
-            System.out.println("\tnested testing");
+            log.debug("\tnested testing");
         }
     }
 
@@ -58,17 +60,17 @@ public class E03LifecycleInheritanceDemoTest {
 
         @BeforeEach
         public void beforeEach() {
-            System.out.println("\tanother nested beforeEach");
+            log.debug("\tanother nested beforeEach");
         }
 
         @AfterEach
         public void afterEach() {
-            System.out.println("\tanother nested afterEach");
+            log.debug("\tanother nested afterEach");
         }
 
         @Test
         void test() {
-            System.out.println("\tanother nested testing");
+            log.debug("\tanother nested testing");
         }
     }
 }

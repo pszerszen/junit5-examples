@@ -1,34 +1,36 @@
 package com.pgs.junit5.examples;
 
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+@Log4j2
 public class E02NewLifecycleNamesTest {
     @BeforeAll
     public static void beforeAll() {
-        System.out.println("beforeAll");
+        log.debug("beforeAll");
     }
 
     @BeforeEach
     public void beforeEach() {
-        System.out.println("beforeEach");
+        log.debug("beforeEach");
     }
 
     @AfterEach
     public void afterEach() {
-        System.out.println("afterEach");
+        log.debug("afterEach");
     }
 
     @AfterAll
     public static void afterAll() {
-        System.out.println("afterAll");
+        log.debug("afterAll");
     }
 
     @Test
     void test() {
-        System.out.println("testing");
+        log.debug("testing");
     }
 }
