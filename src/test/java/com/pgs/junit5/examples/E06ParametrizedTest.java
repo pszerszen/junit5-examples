@@ -1,5 +1,6 @@
 package com.pgs.junit5.examples;
 
+import com.pgs.junit5.examples.extensions.tags.Special;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -20,7 +21,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 @Log4j2
-public class E06Parametrized {
+public class E06ParametrizedTest {
 
     @TestFactory
     @ExtendWith(FibonacciParameterResolver.class)
@@ -34,6 +35,7 @@ public class E06Parametrized {
     }
 
     @Test
+    @Special
     @DisplayName("Test not needing parameters.")
     public void test2() {
     }

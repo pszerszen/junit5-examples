@@ -1,5 +1,6 @@
 package com.pgs.junit5.examples;
 
+import com.pgs.junit5.examples.extensions.tags.Special;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -49,6 +50,7 @@ public class E03LifecycleInheritanceDemoTest {
             log.debug("\tnested afterEach");
         }
 
+        @Special
         @Test
         void test() {
             log.debug("\tnested testing");
