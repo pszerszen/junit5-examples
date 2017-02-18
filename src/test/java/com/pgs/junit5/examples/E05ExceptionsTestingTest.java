@@ -1,25 +1,24 @@
 package com.pgs.junit5.examples;
 
+import org.junit.jupiter.api.Test;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class E05ExceptionsTestingTest {
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
-
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowException() {
-        new Generator().generate(null,0);
+        assertThrows(IllegalArgumentException.class,
+                () -> new Generator().generate("AAAE", 0));
     }
 
     @Test
     public void shouldThrowExceptionWithMessage() {
-        expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("length must not be lower than 3");
+        Throwable throwable = assertThrows(IllegalArgumentException.class,
+                () -> new Generator().generate(null, 0));
 
-        new Generator().generate("AAAE",0);
+        assertEquals("parameter must not be null", throwable.getMessage());
     }
+
 }

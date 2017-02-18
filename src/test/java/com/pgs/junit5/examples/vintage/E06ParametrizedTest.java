@@ -1,36 +1,33 @@
-package com.pgs.junit5.examples;
+package com.pgs.junit5.examples.vintage;
 
+import com.pgs.junit5.examples.Fibonacci;
+import lombok.RequiredArgsConstructor;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import java.util.Arrays;
 import java.util.Collection;
 
-import static org.junit.Assert.assertEquals;
-
 @RunWith(Parameterized.class)
+@RequiredArgsConstructor
 public class E06ParametrizedTest {
 
-    @Parameterized.Parameters(name = "input={0}, expected={1}")
+    @Parameters(name = "input={0}, expected={1}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
                 { 0, 0 }, { 1, 1 }, { 2, 1 }, { 3, 2 }, { 4, 3 }, { 5, 5 }, { 6, 8 }
         });
     }
 
-    private int fInput;
-
-    private int fExpected;
-
-    public E06ParametrizedTest(int input, int expected) {
-        fInput = input;
-        fExpected = expected;
-    }
+    private final int fInput;
+    private final int fExpected;
 
     @Test
     public void test() {
-        assertEquals(fExpected, Fibonacci.compute(fInput));
+        Assert.assertEquals(fExpected, Fibonacci.compute(fInput));
     }
 
 }

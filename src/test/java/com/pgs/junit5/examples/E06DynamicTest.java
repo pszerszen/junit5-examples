@@ -13,7 +13,7 @@ import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-public class E061DynamicTest {
+public class E06DynamicTest {
 
     @TestFactory
     Stream<DynamicTest> fibonacciTestFactory() {

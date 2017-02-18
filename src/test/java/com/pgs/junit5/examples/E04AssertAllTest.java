@@ -1,27 +1,27 @@
 package com.pgs.junit5.examples;
 
 import com.google.common.collect.ImmutableList;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-@RunWith(JUnit4.class)
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class E04AssertAllTest {
 
     @Test
     public void shouldReturnCollectionOfSizeWithFixedFirstElement() {
         List<String> actual = getActual();
 
-        Assert.assertEquals("Size must be 3", 3, actual.size());
-        Assert.assertEquals("AZZ element must be first", "AZZ", actual.get(0));
+        assertAll("collection",
+                () -> assertEquals(3, actual.size(), "Size must be 3"),
+                () -> assertEquals("AZZ", actual.get(0), "AAA element must be first")
+        );
     }
 
     private List<String> getActual() {
         return ImmutableList.of("AAA", "anything");
     }
-
 
 }

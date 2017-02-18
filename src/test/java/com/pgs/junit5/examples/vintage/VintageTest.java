@@ -1,4 +1,4 @@
-package com.pgs.junit5.examples;
+package com.pgs.junit5.examples.vintage;
 
 import org.junit.Test;
 
