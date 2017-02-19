@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html lang="en" class="ie ie6 lte9 lte8 lte7">    <![endif]-->
+<!--[if IE 7]>
+<html lang="en" class="ie ie7 lte9 lte8 lte7">    <![endif]-->
+<!--[if IE 8]>
+<html lang="en" class="ie ie8 lte9 lte8">        <![endif]-->
+<!--[if IE 9]>
+<html lang="en" class="ie ie9 lte9">            <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<!--[if IE 6]>
+<html id="ie6" lang="en-GB">
+<![endif]-->
+<!--[if IE 7]>
+<html id="ie7" lang="en-GB">
+<![endif]-->
+<!--[if IE 8]>
+<html id="ie8" lang="en-GB">
+<![endif]-->
+<!--[if !(IE 6) | !(IE 7) | !(IE 8)  ]><!-->
+<html lang="en-GB">
+<!--<![endif]-->
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <meta property="og:title" content="Big data and machine learning with Apache Spark and Cassandra Part 1 – Architecture"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:url" content="https://www.pgs-soft.com/big-data-and-machine-learning-with-apache-spark-and-cassandra-part-1-architecture/"/>
+    <meta property="og:description"
+          content="Have you ever been curious about machine learning and big data? We were, that’s why we decided to develop research project which helped us gain some knowledge in these fields. You can find results of our work in this article."/>
+    <meta property="og:site_name" content="PGS Software"/>
+    <meta property="og:locale" content="en_gb"/>
+    <meta property="og:image" content="https://www.pgs-soft.com/wp-content/uploads/2016/10/big-data-and-machine-learning.jpg"/>
+    <meta property="og:image:width" content="1200"/>
+    <meta property="og:image:height" content="630"/>
+    <meta property="article:tag" content="Apache Spark"/>
+    <meta property="article:tag" content="Big Data"/>
+    <meta property="article:tag" content="Cassandra"/>
+    <meta property="article:tag" content="Java"/>
+    <link rel="stylesheet" type="text/css" media="all" href="https://www.pgs-soft.com/wp-content/themes/pgstemplate/style.css"/>
+    <title>Big data and machine learning with Apache Spark and Cassandra Part 1 – Architecture | PGS Software</title>
+
+    <!-- All in One SEO Pack 2.3.11.1 by Michael Torbert of Semper Fi Web Designob_start_detected [-1,-1] -->
+    <meta name="description"
+          content="Have you ever been curious about machine learning and big data? We were, that’s why we decided to develop research project which helped us gain some knowledge"/>
+
+    <!-- /all in one seo pack -->
+    <link rel='dns-prefetch' href='//www.google.com'/>
+    <link rel='dns-prefetch' href='//s.w.org'/>
+    <script type="text/javascript">
+        window._wpemojiSettings = {
+            "baseUrl": "https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/",
+            "ext": ".png",
+            "svgUrl": "https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/",
+            "svgExt": ".svg",
+            "source": {"concatemoji": "https:\/\/www.pgs-soft.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.2"}
+        };
+        !function (a, b, c){
+            function d(a){
+                var b, c, d, e, f = String.fromCharCode;
+                if (!k || !k.fillText)return !1;
+                switch (k.clearRect(0, 0, j.width, j.height), k.textBaseline = "top", k.font = "600 32px Arial", a){
+                    case"flag":
+                        return k.fillText(f(55356, 56826, 55356, 56819), 0, 0), !(j.toDataURL().length < 3e3) && (k.clearRect(0, 0, j.width, j.height), k.fillText(f(55356, 57331, 65039, 8205, 55356, 57096), 0, 0), b = j.toDataURL(), k.clearRect(0, 0, j.width, j.height), k.fillText(f(55356, 57331, 55356, 57096), 0, 0), c = j.toDataURL(), b !== c);
+                    case"emoji4":
+                        return k.fillText(f(55357, 56425, 55356, 57341, 8205, 55357, 56507), 0, 0), d = j.toDataURL(), k.clearRect(0, 0, j.width, j.height), k.fillText(f(55357, 56425, 55356, 57341, 55357, 56507), 0, 0), e = j.toDataURL(), d !== e
+                }
+                return !1
+            }
+
+            function e(a){
+                var c = b.createElement("script");
+                c.src = a, c.defer = c.type = "text/javascript", b.getElementsByTagName("head")[0].appendChild(c)
+            }
+
+            var f, g, h, i, j = b.createElement("canvas"), k = j.getContext && j.getContext("2d");
+            for (i = Array("flag", "emoji4"), c.supports = {
+                everything: !0,
+                everythingExceptFlag: !0
+            }, h = 0; h < i.length; h++)c.supports[i[h]] = d(i[h]), c.supports.everything = c.supports.everything && c.supports[i[h]], "flag" !== i[h] && (c.supports.everythingExceptFlag = c.supports.everythingExceptFlag && c.supports[i[h]]);
+            c.supports.everythingExceptFlag = c.supports.everythingExceptFlag && !c.supports.flag, c.DOMReady = !1, c.readyCallback = function (){
+                c.DOMReady = !0
+            }, c.supports.everything || (g = function (){
+                c.readyCallback()
+            }, b.addEventListener ? (b.addEventListener("DOMContentLoaded", g, !1), a.addEventListener("load", g, !1)) : (a.attachEvent("onload", g), b.attachEvent("onreadystatechange", function (){
+                    "complete" === b.readyState && c.readyCallback()
+                })), f = c.source || {}, f.concatemoji ? e(f.concatemoji) : f.wpemoji && f.twemoji && (e(f.twemoji), e(f.wpemoji)))
+        }(window, document, window._wpemojiSettings);
+    </script>
+    <style type="text/css">
+        img.wp-smiley,
+        img.emoji {
+            display: inline !important;
+            border: none !important;
+            box-shadow: none !important;
+            height: 1em !important;
+            width: 1em !important;
+            margin: 0 .07em !important;
+            vertical-align: -0.1em !important;
+            background: none !important;
+            padding: 0 !important;
+        }
+        li.L0, li.L1, li.L2, li.L3,
+        li.L5, li.L6, li.L7, li.L8 {
+            list-style-type: decimal !important;
+        }
+    </style>
+    <link rel='stylesheet' id='contact-form-7-css' href='https://www.pgs-soft.com/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=4.6'
+          type='text/css' media='all'/>
+    <link rel='stylesheet' id='irm_app_css-css'
+          href='https://www.pgs-soft.com/wp-content/plugins/investor-relations-manager/public/dist/css/all.css?ver=v.0.2' type='text/css'
+          media='all'/>
+    <link rel='stylesheet' id='page-list-style-css' href='https://www.pgs-soft.com/wp-content/plugins/page-list/css/page-list.css?ver=5.1'
+          type='text/css' media='all'/>
+    <link rel='stylesheet' id='qts_front_styles-css'
+          href='https://www.pgs-soft.com/wp-content/plugins/qtranslate-slug/assets/css/qts-default.css?ver=4.7.2' type='text/css' media='all'/>
+    <link rel='stylesheet' id='wp-syntax-css-css' href='https://www.pgs-soft.com/wp-content/themes/pgstemplate/wp-syntax.css?ver=1.1' type='text/css'
+          media='all'/>
+    <link rel='stylesheet' id='main-css-css' href='https://www.pgs-soft.com/wp-content/themes/pgstemplate/css/main.css?ver=170209-162604'
+          type='text/css' media='all'/>
+    <script type='text/javascript' src='https://www.pgs-soft.com/wp-content/themes/pgstemplate/js/jquery-1.7.2.min.js?ver=1.7.2'></script>
+    <script type='text/javascript' src='https://www.google.com/jsapi?ver=4.7.2'></script>
+    <script type='text/javascript' src='https://www.pgs-soft.com/wp-content/themes/pgstemplate/js/hotjarTracking_live.js?ver=150817-182322'></script>
+    <script type='text/javascript'
+            src='https://www.pgs-soft.com/wp-content/themes/pgstemplate/js/custom/pgsScrollHead.min.js?ver=170209-162604'></script>
+    <link rel="canonical" href="https://www.pgs-soft.com/big-data-and-machine-learning-with-apache-spark-and-cassandra-part-1-architecture/"/>
+    <link rel='https://api.w.org/' href='https://www.pgs-soft.com/wp-json/'/>
+    <link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://www.pgs-soft.com/xmlrpc.php?rsd"/>
+    <link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://www.pgs-soft.com/wp-includes/wlwmanifest.xml"/>
+    <link rel='prev' title='Securing your app with encrypted-core-data' href='https://www.pgs-soft.com/securing-your-app-with-encrypted-core-data/'/>
+    <link rel='next' title='JIRA Query Language (JQL) – the most flexible way to search in JIRA'
+          href='https://www.pgs-soft.com/jira-query-language-jql-the-most-flexible-way-to-search-in-jira/'/>
+    <link rel="alternate" type="application/json+oembed"
+          href="https://www.pgs-soft.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.pgs-soft.com%2Fbig-data-and-machine-learning-with-apache-spark-and-cassandra-part-1-architecture%2F"/>
+    <link rel="alternate" type="text/xml+oembed"
+          href="https://www.pgs-soft.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.pgs-soft.com%2Fbig-data-and-machine-learning-with-apache-spark-and-cassandra-part-1-architecture%2F&#038;format=xml"/>
+    <meta name="generator" content="qTranslate-X 3.4.6.8"/>
+    <link rel="Shortcut Icon" type="image/x-icon" href="https://www.pgs-soft.com/wp-content/themes/pgstemplate/img/favicon.ico"/>
+    <link hreflang="en" href="https://www.pgs-soft.com/big-data-and-machine-learning-with-apache-spark-and-cassandra-part-1-architecture/"
+          rel="alternate"/>
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:site" content="@pgssoftware"/>
+    <meta name="twitter:title" content="Big data and machine learning with Apache Spark and Cassandra Part 1 – Architecture"/>
+    <meta name="twitter:description"
+          content="Have you ever been curious about machine learning and big data? We were, that’s why we decided to develop research project which helped us gain some knowledge in these fields. You can find results of our work in this article."/>
+    <meta name="twitter:image" content="https://www.pgs-soft.com/wp-content/uploads/2016/10/big-data-and-machine-learning-150x150.jpg"/>
+    <script type="text/javascript">
+        (function (i, s, o, g, r, a, m){
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function (){
+                    (i[r].q = i[r].q || []).push(arguments)
+                }
+                , i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+        ga('create', 'UA-1554273-1', 'auto');
+        ga('require', 'displayfeatures');
+        ga('require', 'linkid');
+        ga('send', 'pageview');
+    </script>
+    <link href="https://github.com/google/code-prettify/raw/master/src/prettify.css" type="text/css">
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    <!--[if IE]>
+    <script type="text/javascript" src="https://www.pgs-soft.com/wp-content/themes/pgstemplate/js/webshim/js-webshim/minified/polyfiller.js"></script>
+    <script type="text/javascript">
+        webshim.setOptions('extendNative', true);
+        webshim.polyfill('forms forms-ext');</script><![endif]-->
+    <script src="https://use.fontawesome.com/5d5fdc9691.js"></script>
+    <!--[if lt IE 9]>
+    <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <script type="text/javascript" src="https://www.pgs-soft.com/wp-content/themes/pgstemplate/js/selectivizr-min.js"></script>
+    <script src="https://www.pgs-soft.com/wp-content/themes/pgstemplate/js/respond.min.js"/></script>
+    <![endif]-->
+    <!--[if IE 8]>
+    <script src="https://www.pgs-soft.com/wp-content/themes/pgstemplate/js/custom/ie8-fix.min.js"/></script>
+    <![endif]-->
+    <!--[if IE 7]>
+    <script src="https://www.pgs-soft.com/wp-content/themes/pgstemplate/js/custom/ie7-fix.min.js"/></script>
+    <![endif]-->
+</head>
+
+<body class="post-template-default single single-post postid-16978 single-format-standard en" onload="prettyPrint()">
+<div id="page" class="newLayout en">
+    <header class="main ie-beforepc" data-role="header">
+        <div class="container clearfix">
+            <div class="logo-container-black">
+                <a href="https://www.pgs-soft.com/" title="PGS Software">
+                    <svg class="logo-pgs-dark" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+     viewBox="0 0 118 65" style="enable-background:new 0 0 118 65;" xml:space="preserve">
+<style type="text/css">
+    .st0 {
+        fill: none;
+    }
+
+    .st1 {
+        fill: #F4762B !important;
+    }
+</style>
+    <rect class="st0" width="118" height="65"/>
+    <path d="M91.8,41.4h5.8V42C97.4,42,97.2,42,97,42h-4v5h3.9c0.3,0,0.5,0,0.7-0.1v0.6c-0.2,0-0.4,0-0.7,0H93v5.3h3.9
+	c0.1,0,0.3,0,0.7-0.1v0.7h-5.7c0-0.2,0-0.4,0-0.6V42C91.8,41.8,91.8,41.6,91.8,41.4 M83.6,47.2h1.2c0.6,0,1.2-0.1,1.7-0.4
+	c0.8-0.5,1.3-1.2,1.3-2.2c0-0.4-0.1-0.9-0.3-1.2c-0.2-0.4-0.5-0.7-0.8-0.9c-0.5-0.3-1.2-0.5-2.1-0.5h-1.1L83.6,47.2L83.6,47.2z
+	 M83.6,47.7v5.1c0,0.2,0,0.4,0.1,0.6h-1.3c0-0.2,0.1-0.4,0.1-0.6V42c0-0.2,0-0.4-0.1-0.6h2.7c0.8,0,1.5,0.1,2.1,0.4
+	c0.5,0.2,1,0.6,1.3,1c0.4,0.5,0.5,1.1,0.5,1.7c0,0.9-0.3,1.7-1,2.2c-0.7,0.5-1.6,0.8-2.9,0.9l4.8,5.3c0.1,0.2,0.3,0.3,0.5,0.4h-1.8
+	c-0.1-0.1-0.2-0.3-0.3-0.5L83.6,47.7z M73.6,48.8h4.7l-2.4-6.2L73.6,48.8z M73.4,49.3l-1.4,3.6c0,0.1-0.1,0.2-0.1,0.5h-0.7
+	c0.1-0.2,0.2-0.3,0.2-0.5l4.1-11.1c0-0.1,0.1-0.2,0.1-0.4h1.1c0,0.1,0,0.2,0.1,0.3l4.3,11.2c0,0.1,0.1,0.3,0.3,0.5H80
+	c0-0.2,0-0.3-0.1-0.5l-1.4-3.6L73.4,49.3L73.4,49.3z M64.7,42.7l-2.9,10.2c0,0.1-0.1,0.2-0.1,0.5h-1.1c0-0.2,0-0.4-0.1-0.6
+	l-2.9-10.8c0-0.2-0.1-0.3-0.2-0.5h1.2c0,0,0,0,0,0c0,0,0,0.2,0.1,0.4L61.5,52l2.9-10.1c0-0.2,0.1-0.3,0.1-0.4c0,0,0-0.1,0-0.1h1.2
+	c0,0,0,0.1,0,0.1c0,0.1,0,0.2,0.1,0.4l3,10.1l2.7-10.1c0-0.2,0.1-0.3,0.1-0.4h0.6c0,0.1-0.1,0.2-0.2,0.4l-3,11
+	c0,0.1-0.1,0.2-0.1,0.5h-1.1c0-0.2,0-0.4-0.1-0.6L64.7,42.7z M48,41.4h8.6v0.7C56.2,42,55.9,42,55.7,42h-2.9v10.7
+	c0,0.2,0,0.4,0.1,0.6h-1.3c0-0.2,0.1-0.4,0.1-0.6V42h-3c-0.2,0-0.5,0-0.8,0.1L48,41.4L48,41.4z M41.1,41.4h5.7V42
+	c-0.2,0-0.4-0.1-0.7-0.1h-3.8V47h3.3c0.2,0,0.4,0,0.6-0.1v0.6c-0.2,0-0.4-0.1-0.6-0.1h-3.3v5.3c0,0.2,0,0.4,0.1,0.6h-1.3
+	c0-0.2,0.1-0.4,0.1-0.6V42C41.2,41.8,41.1,41.6,41.1,41.4z M33.9,41.9c-1.6,0-2.7,0.5-3.5,1.6c-0.7,1-1,2.2-1,3.8c0,1.7,0.3,3,1,4
+	c0.8,1.1,2,1.6,3.6,1.6c1.5,0,2.7-0.5,3.5-1.5c0.7-1,1.1-2.3,1.1-4c0-1.7-0.4-3-1.1-4c-0.4-0.5-0.9-0.9-1.5-1.2
+	C35.4,42,34.7,41.9,33.9,41.9z M34,41.3c1.8,0,3.3,0.5,4.3,1.6c1.1,1.1,1.6,2.6,1.6,4.5c0,2-0.5,3.5-1.6,4.6c-1,1-2.4,1.6-4.3,1.6
+	c-1.9,0-3.4-0.5-4.4-1.6c-1-1.1-1.5-2.6-1.5-4.6c0-1.9,0.5-3.3,1.6-4.4C30.7,41.8,32.1,41.3,34,41.3z M20,52.6l0.3-1
+	c0.3,0.2,0.5,0.4,0.8,0.6c0.6,0.4,1.3,0.6,2.1,0.6c0.9,0,1.6-0.3,2.1-0.8c0.4-0.4,0.6-1,0.6-1.6c0-0.8-0.3-1.4-0.9-1.9
+	C24.7,48.3,24,48,23,47.5c-1-0.5-1.7-0.9-2.1-1.4c-0.5-0.5-0.8-1.2-0.8-1.9c0-0.6,0.2-1.1,0.5-1.6c0.7-0.9,1.7-1.4,3.2-1.4
+	c0.9,0,1.7,0.2,2.6,0.6l-0.3,0.8c-0.9-0.5-1.7-0.8-2.5-0.8c-0.8,0-1.4,0.2-1.9,0.7c-0.4,0.4-0.6,0.9-0.6,1.4c0,0.5,0.2,1,0.5,1.4
+	c0.4,0.4,1.1,0.8,2.1,1.3c0.7,0.3,1.2,0.6,1.5,0.8c0.3,0.2,0.6,0.4,0.8,0.6c0.6,0.6,0.9,1.3,0.9,2.1c0,0.6-0.2,1.2-0.5,1.7
+	c-0.7,1.1-1.8,1.6-3.4,1.6C22,53.5,21,53.2,20,52.6z"/>
+    <path d="M63.7,36.6l0.7-2.2c0.6,0.5,1.2,1,1.6,1.3c1.3,0.9,2.9,1.4,4.5,1.4c1.9,0,3.4-0.6,4.5-1.8c0.9-1,1.4-2.2,1.4-3.6
+	c0-1.7-0.7-3.1-2-4.2c-0.6-0.5-1.9-1.2-4.1-2.3c-2.2-1.1-3.7-2.1-4.6-3c-1.2-1.2-1.7-2.5-1.7-4.2c0-1.3,0.4-2.5,1.2-3.6
+	c1.5-2,3.8-3,6.9-3c1.8,0,3.7,0.4,5.6,1.3l-0.7,1.8c-1.9-1.2-3.7-1.8-5.3-1.8c-1.7,0-3,0.5-4,1.6c-0.8,0.9-1.2,1.9-1.2,3.1
+	c0,1.2,0.4,2.2,1.2,3c0.8,0.8,2.3,1.8,4.5,2.9c1.5,0.7,2.6,1.3,3.3,1.8c0.7,0.4,1.2,0.9,1.7,1.4c1.3,1.4,1.9,2.9,1.9,4.7
+	c0,1.3-0.4,2.6-1.1,3.8c-1.5,2.4-4,3.6-7.3,3.6C68.1,38.5,65.9,37.9,63.7,36.6 M23.2,24.9h3.1c1.5,0,2.8-0.2,3.7-0.6
+	c1-0.4,1.8-1.1,2.4-2c0.6-1,0.9-2.1,0.9-3.4c0-1.8-0.6-3.2-1.8-4.3c-1.2-1-2.8-1.6-4.8-1.6h-3.6L23.2,24.9L23.2,24.9z M51.7,23.8h8
+	c-0.1,0.4-0.1,0.9-0.1,1.2v10.2c0,0.5,0.1,1,0.3,1.4c-2.1,0.7-3.7,1.2-4.9,1.5c-1.2,0.2-2.5,0.4-3.9,0.4c-3.8,0-6.7-1.2-8.9-3.5
+	c-2.3-2.6-3.5-5.9-3.5-10.1c0-4.5,1.4-8,4.2-10.5c2.2-2,5.2-2.9,8.9-2.9c1.2,0,2.3,0.1,3.4,0.3c1,0.2,2.3,0.6,3.7,1.2v2.3
+	c-2.6-1.5-5.1-2.3-7.5-2.3c-2.8,0-5.1,0.9-6.9,2.8c-1.1,1.1-1.8,2.3-2.2,3.7c-0.5,1.7-0.8,3.5-0.8,5.6c0,1.4,0.2,2.8,0.5,4.2
+	c0.3,1.4,0.7,2.5,1.2,3.3c1,1.8,2.5,3.1,4.5,3.8c1.3,0.5,2.6,0.7,4.1,0.7c1.9,0,3.7-0.5,5.5-1.4l0-11h-5.4L51.7,23.8L51.7,23.8z
+	 M23.2,26.1v10.9c0,0.4,0,0.8,0.1,1.2h-2.8c0.1-0.4,0.1-0.8,0.1-1.2V13.1c0-0.4,0-0.8-0.1-1.3h7c1.8,0,3.4,0.4,4.9,1.1
+	c2.3,1.2,3.5,3.1,3.5,5.7c0,2.1-0.7,3.8-2.2,5.1c-1.7,1.5-4.1,2.3-7.2,2.3L23.2,26.1L23.2,26.1z"/>
+    <rect x="82.2" y="12" class="st1" width="15.8" height="25.9"/>
+</svg>
+                </a>
+            </div>
+            <div id="mobile-nav-button">
+                <span class="mobile-nav-button-text">MENU</span>
+            </div>
+            <div class="wrapper-nav hidden-xs">
+                <nav class="main" data-role="navigation">
+                    <div class="logo-container-white">
+                        <a href="https://www.pgs-soft.com/" title="PGS Software">
+                            <!-- Generator: Adobe Illustrator 19.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+                            <svg class="logo-pgs-white" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+     viewBox="0 0 118 65" style="enable-background:new 0 0 118 65;" xml:space="preserve">
+<style type="text/css">
+    .st0 {
+        fill: none;
+    }
+
+    .st2 {
+        fill: #FFFFFF;
+    }
+</style>
+    <rect class="st0" width="118" height="65"/>
+    <path class="st2" d="M91.8,41.4h5.8V42C97.4,42,97.2,42,97,42h-4v5h3.9c0.3,0,0.5,0,0.7-0.1v0.6c-0.2,0-0.4,0-0.7,0H93v5.3h3.9
+	c0.1,0,0.3,0,0.7-0.1v0.7h-5.7c0-0.2,0-0.4,0-0.6V42C91.8,41.8,91.8,41.6,91.8,41.4 M83.6,47.2h1.2c0.6,0,1.2-0.1,1.7-0.4
+	c0.8-0.5,1.3-1.2,1.3-2.2c0-0.4-0.1-0.9-0.3-1.2c-0.2-0.4-0.5-0.7-0.8-0.9c-0.5-0.3-1.2-0.5-2.1-0.5h-1.1L83.6,47.2L83.6,47.2z
+	 M83.6,47.7v5.1c0,0.2,0,0.4,0.1,0.6h-1.3c0-0.2,0.1-0.4,0.1-0.6V42c0-0.2,0-0.4-0.1-0.6h2.7c0.8,0,1.5,0.1,2.1,0.4
+	c0.5,0.2,1,0.6,1.3,1c0.4,0.5,0.5,1.1,0.5,1.7c0,0.9-0.3,1.7-1,2.2c-0.7,0.5-1.6,0.8-2.9,0.9l4.8,5.3c0.1,0.2,0.3,0.3,0.5,0.4h-1.8
+	c-0.1-0.1-0.2-0.3-0.3-0.5L83.6,47.7z M73.6,48.8h4.7l-2.4-6.2L73.6,48.8z M73.4,49.3l-1.4,3.6c0,0.1-0.1,0.2-0.1,0.5h-0.7
+	c0.1-0.2,0.2-0.3,0.2-0.5l4.1-11.1c0-0.1,0.1-0.2,0.1-0.4h1.1c0,0.1,0,0.2,0.1,0.3l4.3,11.2c0,0.1,0.1,0.3,0.3,0.5H80
+	c0-0.2,0-0.3-0.1-0.5l-1.4-3.6L73.4,49.3L73.4,49.3z M64.7,42.7l-2.9,10.2c0,0.1-0.1,0.2-0.1,0.5h-1.1c0-0.2,0-0.4-0.1-0.6
+	l-2.9-10.8c0-0.2-0.1-0.3-0.2-0.5h1.2c0,0,0,0,0,0c0,0,0,0.2,0.1,0.4L61.5,52l2.9-10.1c0-0.2,0.1-0.3,0.1-0.4c0,0,0-0.1,0-0.1h1.2
+	c0,0,0,0.1,0,0.1c0,0.1,0,0.2,0.1,0.4l3,10.1l2.7-10.1c0-0.2,0.1-0.3,0.1-0.4h0.6c0,0.1-0.1,0.2-0.2,0.4l-3,11
+	c0,0.1-0.1,0.2-0.1,0.5h-1.1c0-0.2,0-0.4-0.1-0.6L64.7,42.7z M48,41.4h8.6v0.7C56.2,42,55.9,42,55.7,42h-2.9v10.7
+	c0,0.2,0,0.4,0.1,0.6h-1.3c0-0.2,0.1-0.4,0.1-0.6V42h-3c-0.2,0-0.5,0-0.8,0.1L48,41.4L48,41.4z M41.1,41.4h5.7V42
+	c-0.2,0-0.4-0.1-0.7-0.1h-3.8V47h3.3c0.2,0,0.4,0,0.6-0.1v0.6c-0.2,0-0.4-0.1-0.6-0.1h-3.3v5.3c0,0.2,0,0.4,0.1,0.6h-1.3
+	c0-0.2,0.1-0.4,0.1-0.6V42C41.2,41.8,41.1,41.6,41.1,41.4z M33.9,41.9c-1.6,0-2.7,0.5-3.5,1.6c-0.7,1-1,2.2-1,3.8c0,1.7,0.3,3,1,4
+	c0.8,1.1,2,1.6,3.6,1.6c1.5,0,2.7-0.5,3.5-1.5c0.7-1,1.1-2.3,1.1-4c0-1.7-0.4-3-1.1-4c-0.4-0.5-0.9-0.9-1.5-1.2
+	C35.4,42,34.7,41.9,33.9,41.9z M34,41.3c1.8,0,3.3,0.5,4.3,1.6c1.1,1.1,1.6,2.6,1.6,4.5c0,2-0.5,3.5-1.6,4.6c-1,1-2.4,1.6-4.3,1.6
+	c-1.9,0-3.4-0.5-4.4-1.6c-1-1.1-1.5-2.6-1.5-4.6c0-1.9,0.5-3.3,1.6-4.4C30.7,41.8,32.1,41.3,34,41.3z M20,52.6l0.3-1
+	c0.3,0.2,0.5,0.4,0.8,0.6c0.6,0.4,1.3,0.6,2.1,0.6c0.9,0,1.6-0.3,2.1-0.8c0.4-0.4,0.6-1,0.6-1.6c0-0.8-0.3-1.4-0.9-1.9
+	C24.7,48.3,24,48,23,47.5c-1-0.5-1.7-0.9-2.1-1.4c-0.5-0.5-0.8-1.2-0.8-1.9c0-0.6,0.2-1.1,0.5-1.6c0.7-0.9,1.7-1.4,3.2-1.4
+	c0.9,0,1.7,0.2,2.6,0.6l-0.3,0.8c-0.9-0.5-1.7-0.8-2.5-0.8c-0.8,0-1.4,0.2-1.9,0.7c-0.4,0.4-0.6,0.9-0.6,1.4c0,0.5,0.2,1,0.5,1.4
+	c0.4,0.4,1.1,0.8,2.1,1.3c0.7,0.3,1.2,0.6,1.5,0.8c0.3,0.2,0.6,0.4,0.8,0.6c0.6,0.6,0.9,1.3,0.9,2.1c0,0.6-0.2,1.2-0.5,1.7
+	c-0.7,1.1-1.8,1.6-3.4,1.6C22,53.5,21,53.2,20,52.6z"/>
+    <path class="st2" d="M63.7,36.6l0.7-2.2c0.6,0.5,1.2,1,1.6,1.3c1.3,0.9,2.9,1.4,4.5,1.4c1.9,0,3.4-0.6,4.5-1.8
+	c0.9-1,1.4-2.2,1.4-3.6c0-1.7-0.7-3.1-2-4.2c-0.6-0.5-1.9-1.2-4.1-2.3c-2.2-1.1-3.7-2.1-4.6-3c-1.2-1.2-1.7-2.5-1.7-4.2
+	c0-1.3,0.4-2.5,1.2-3.6c1.5-2,3.8-3,6.9-3c1.8,0,3.7,0.4,5.6,1.3l-0.7,1.8c-1.9-1.2-3.7-1.8-5.3-1.8c-1.7,0-3,0.5-4,1.6
+	c-0.8,0.9-1.2,1.9-1.2,3.1c0,1.2,0.4,2.2,1.2,3c0.8,0.8,2.3,1.8,4.5,2.9c1.5,0.7,2.6,1.3,3.3,1.8c0.7,0.4,1.2,0.9,1.7,1.4
+	c1.3,1.4,1.9,2.9,1.9,4.7c0,1.3-0.4,2.6-1.1,3.8c-1.5,2.4-4,3.6-7.3,3.6C68.1,38.5,65.9,37.9,63.7,36.6 M23.2,24.9h3.1
+	c1.5,0,2.8-0.2,3.7-0.6c1-0.4,1.8-1.1,2.4-2c0.6-1,0.9-2.1,0.9-3.4c0-1.8-0.6-3.2-1.8-4.3c-1.2-1-2.8-1.6-4.8-1.6h-3.6L23.2,24.9
+	L23.2,24.9z M51.7,23.8h8c-0.1,0.4-0.1,0.9-0.1,1.2v10.2c0,0.5,0.1,1,0.3,1.4c-2.1,0.7-3.7,1.2-4.9,1.5c-1.2,0.2-2.5,0.4-3.9,0.4
+	c-3.8,0-6.7-1.2-8.9-3.5c-2.3-2.6-3.5-5.9-3.5-10.1c0-4.5,1.4-8,4.2-10.5c2.2-2,5.2-2.9,8.9-2.9c1.2,0,2.3,0.1,3.4,0.3
+	c1,0.2,2.3,0.6,3.7,1.2v2.3c-2.6-1.5-5.1-2.3-7.5-2.3c-2.8,0-5.1,0.9-6.9,2.8c-1.1,1.1-1.8,2.3-2.2,3.7c-0.5,1.7-0.8,3.5-0.8,5.6
+	c0,1.4,0.2,2.8,0.5,4.2c0.3,1.4,0.7,2.5,1.2,3.3c1,1.8,2.5,3.1,4.5,3.8c1.3,0.5,2.6,0.7,4.1,0.7c1.9,0,3.7-0.5,5.5-1.4l0-11h-5.4
+	L51.7,23.8L51.7,23.8z M23.2,26.1v10.9c0,0.4,0,0.8,0.1,1.2h-2.8c0.1-0.4,0.1-0.8,0.1-1.2V13.1c0-0.4,0-0.8-0.1-1.3h7
+	c1.8,0,3.4,0.4,4.9,1.1c2.3,1.2,3.5,3.1,3.5,5.7c0,2.1-0.7,3.8-2.2,5.1c-1.7,1.5-4.1,2.3-7.2,2.3L23.2,26.1L23.2,26.1z"/>
+    <rect x="82.2" y="12" class="st2" width="15.8" height="25.9"/>
+</svg>
+                        </a>
+                    </div>
+                    <ul id="menu-menu-glowne" class="main-menu">
+                        <li id="menu-item-17938" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-17938"><a
+                                href="https://www.pgs-soft.com/">Homepage</a></li>
+                        <li id="menu-item-17975"
+                            class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-17975"><a
+                                href="https://kariera.pgs-soft.com">Careers</a>
+                            <ul class="sub-menu">
+                                <li id="menu-item-17943" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17943"><a>Back</a>
+                                </li>
+                                <li id="menu-item-16579" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-16579"><a
+                                        href="https://www.pgs-soft.com/careers/">Careers</a></li>
+                                <li id="menu-item-16580" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-16580"><a
+                                        href="https://www.pgs-soft.com/recommendations/">Recommendations</a></li>
+                            </ul>
+                        </li>
+                        <li id="menu-item-15228"
+                            class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-15228"><a
+                                href="https://www.pgs-soft.com/about-us/">About us</a>
+                            <ul class="sub-menu">
+                                <li id="menu-item-17942" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17942"><a>Back</a>
+                                </li>
+                                <li id="menu-item-15229" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15229"><a
+                                        href="https://www.pgs-soft.com/about-us/">About us</a></li>
+                                <li id="menu-item-15232" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15232"><a
+                                        href="https://www.pgs-soft.com/about-us/our-team/">Our Team</a></li>
+                                <li id="menu-item-15231" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15231"><a
+                                        href="https://www.pgs-soft.com/about-us/location/">Location</a></li>
+                                <li id="menu-item-15230" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15230"><a
+                                        href="https://www.pgs-soft.com/about-us/history/">History</a></li>
+                                <li id="menu-item-15233" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15233"><a
+                                        href="https://www.pgs-soft.com/about-us/faq/">FAQ</a></li>
+                            </ul>
+                        </li>
+                        <li id="menu-item-15234"
+                            class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-15234"><a
+                                href="https://www.pgs-soft.com/services/">Services</a>
+                            <ul class="sub-menu">
+                                <li id="menu-item-17941" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17941"><a>Back</a>
+                                </li>
+                                <li id="menu-item-15246" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15246"><a
+                                        href="https://www.pgs-soft.com/services/">Services</a></li>
+                                <li id="menu-item-15235" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15235"><a
+                                        href="https://www.pgs-soft.com/services/nearshore-delivery-centre/">Nearshore delivery centres</a></li>
+                                <li id="menu-item-15239" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15239"><a
+                                        href="https://www.pgs-soft.com/services/app-development/">Application development</a></li>
+                                <li id="menu-item-15236" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15236"><a
+                                        href="https://www.pgs-soft.com/services/mobile-and-web-development/">Mobile &#038; Web</a></li>
+                                <li id="menu-item-15244" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15244"><a
+                                        href="https://www.pgs-soft.com/services/continuous-delivery/">DevOps &#038; Automation</a></li>
+                                <li id="menu-item-17276" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17276"><a
+                                        href="https://www.pgs-soft.com/services/cloud/">Cloud</a></li>
+                            </ul>
+                        </li>
+                        <li id="menu-item-15248"
+                            class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-15248"><a
+                                href="https://www.pgs-soft.com/how-we-work/">How we work</a>
+                            <ul class="sub-menu">
+                                <li id="menu-item-17940" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17940"><a>Back</a>
+                                </li>
+                                <li id="menu-item-15252" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15252"><a
+                                        href="https://www.pgs-soft.com/how-we-work/">How we work</a></li>
+                                <li id="menu-item-15250" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15250"><a
+                                        href="https://www.pgs-soft.com/how-we-work/methodologies/">Methodologies</a></li>
+                                <li id="menu-item-15251" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15251"><a
+                                        href="https://www.pgs-soft.com/how-we-work/technologies/">Technologies</a></li>
+                                <li id="menu-item-15249" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15249"><a
+                                        href="https://www.pgs-soft.com/how-we-work/infrastructure/">Infrastructure</a></li>
+                            </ul>
+                        </li>
+                        <li id="menu-item-15253" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15253"><a
+                                href="https://www.pgs-soft.com/experience/">Experience</a></li>
+                        <li id="menu-item-17105"
+                            class="menu-item menu-item-type-post_type menu-item-object-page current_page_parent menu-item-17105 active "><a
+                                href="https://www.pgs-soft.com/blog/">Blog</a></li>
+                        <li id="menu-item-15254" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15254"><a
+                                href="https://www.pgs-soft.com/contact-us/">Contact Us</a></li>
+                    </ul>
+                    <ul class="hideMobile lang-nav en">
+                        <li class="pl"><a
+                                href="https://www.pgs-soft.com/pl/english-big-data-and-machine-learning-with-apache-spark-and-cassandra-part-1-architecture/"
+                                title="Pl"></a></li>
+                        <li class="en"><a href="#" title="En"></a></li>
+                        <li class="de"><a
+                                href="https://www.pgs-soft.com/de/english-big-data-and-machine-learning-with-apache-spark-and-cassandra-part-1-architecture/"
+                                title="De"></a></li>
+                        <li class="top">^</li>
+                    </ul>
+                    <ul class="displayMobile mobileLang">
+                        <li class="pl mobileLangItem "><a
+                                href="https://www.pgs-soft.com/pl/english-big-data-and-machine-learning-with-apache-spark-and-cassandra-part-1-architecture/"
+                                title="Pl">PL</a></li>
+                        <li class="en mobileLangItem active"><a href="#" title="En">EN</a></li>
+                        <li class="de mobileLangItem "><a
+                                href="https://www.pgs-soft.com/de/english-big-data-and-machine-learning-with-apache-spark-and-cassandra-part-1-architecture/"
+                                title="De">DE</a></li>
+                    </ul>
+                    <ul class="hideMobile social-nav">
+                        <li class="fb">
+                            <a href="https://www.facebook.com/pgs.software" title="Facebook" target="_blank">
+                                <i class="fa fa-facebook fa-lg first-icon"></i>
+                                <i class="fa fa-facebook fa-lg hover-icon"></i>
+                            </a>
+                        </li>
+                        <li class="in">
+                            <a href="https://www.linkedin.com/company/pgs-software-s-a-" title="LinkedIN" target="_blank">
+                                <i class="fa fa-linkedin fa-lg first-icon"></i>
+                                <i class="fa fa-linkedin fa-lg hover-icon"></i>
+                            </a>
+                        </li>
+                        <li class="tt">
+                            <a href="https://twitter.com/pgssoftware" title="Twitter" target="_blank">
+                                <i class="fa fa-twitter fa-lg first-icon"></i>
+                                <i class="fa fa-twitter fa-lg hover-icon"></i>
+                            </a>
+                        </li>
+                        <li class="yt">
+                            <a href="https://www.youtube.com/user/PGSSoft" title="YouTube" target="_blank">
+                                <i class="fa fa-youtube fa-lg first-icon"></i>
+                                <i class="fa fa-youtube fa-lg hover-icon"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="displayMobile social-nav-mobile">
+                        <li class="fb">
+                            <a href="https://www.facebook.com/pgs.software" title="Facebook" target="_blank">
+                                <i class="icomoon-facebook"></i></a>
+                        </li>
+                        <li class="in">
+                            <a href="https://www.linkedin.com/company/pgs-software-s-a-" title="LinkedIN" target="_blank"><i
+                                    class="icomoon-linkedin"></i></a>
+                        </li>
+                        <li class="tt">
+                            <a href="https://twitter.com/pgssoftware" title="Twitter" target="_blank"><i class="icomoon-twitter"></i></a>
+                        </li>
+                        <li class="yt">
+                            <a href="https://www.youtube.com/user/PGSSoft" title="YouTube" target="_blank"><i class="icomoon-youtube"></i></a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <!-- container -->
+    </header>
+    <!-- main -->
+    <section class="main" data-role="main">
+        <header class="article-header article-header--with-image">
+            <div class="article-image"
+                 style="background-image: url(http://junit.org/junit4/images/junit5-banner.png);"></div>
+            <div class="container">
+                <div class="bread-crumbs"><a class="bread-crumb-link" href="https://www.pgs-soft.com">home</a><span> / </span><a
+                        class="bread-crumb-link" href="https://www.pgs-soft.com/blog/">blog</a><span> / </span><span class="current-page">JUnit 5 - first gaze</span>
+                </div>
+                <h1 class="page-title">JUnit 5 - first gaze</h1>
+                <p id="post-meta">February 24, 2017, Piotr Szerszeń</p>
+            </div>
+        </header>
+        <div class="main">
+            <article class="main">
+
+                <div class="entry-content">
+                    <div class="container">
+                        <div class="row">
+                            <div class="content col-md-9 col-xs-12">
+                                <p>
+                                <p class="introduction_post">
+                                    Testing your applications is often a part of development just as important as programming. Of course testing
+                                    everything manually would be awfully time consuming and tiring.<br/>
+                                    If you thing "automated testing" - you thing JUnit. Some time ago my attention has been caught by the very new,
+                                    the 5th, version of this framework. I decided to share a few facts and code samples.
+                                </p>
+                                </p>
+                                <p>First thing to mention is that JUnit 5 is technically speaking a very new framework rather than next version of the
+                                    one we already know. This is actually a good news. The previous version is decent, but it still has a few serious
+                                    flaws which couldn't be got rid of with simple fixes. We needed a new approach in some cases - now we can have it.
+                                    Most of equivalent annotations has different name and of of them are in another package. This is letting to use
+                                    JUnit 3/4 and JUnit 5 in parallel. So any project currently using JUnit 4 can start using JUnit 5 and developers
+                                    can start writing new tests with new framework. Legacy tests can be (wel they should be) migrated gradually.
+                                </p>
+                                <p><strong>SET UP:</strong></p>
+                                <p>To use both JUnits in maven project you need to add these dependencies in your pom.xml</p>
+                                <xmp class="prettyprint language-xml linenums:65">
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>LATEST</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-engine</artifactId>
+        <version>LATEST</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.junit.vintage</groupId>
+        <artifactId>junit-vintage-engine</artifactId>
+        <version>LATEST</version>
+    </dependency>
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>LATEST</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <version>LATEST</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-all</artifactId>
+        <version>LATEST</version>
+        <scope>test</scope>
+    </dependency>
+                                </xmp>
+
+
+                                <p><strong>Big data and machine learning </strong>are topics rapidly growing in popularity. <strong>Big data’s
+                                    purpose
+                                    is to collect massive amounts of domain-specific data</strong>, containing lots of useful information. For
+                                    example, we can use all the customer data of a retail shop to find out what a retailer can do to <strong>increase
+                                        sales and maximize income</strong>.</p>
+                                <p><strong>Machine learning</strong> is ideal for exploiting the potential of big data. It is a set of specific
+                                    algorithms which use training data to create a model describing every piece of information as a set of
+                                    features.
+                                    Based on that model,<strong> you can use other data with a similar structure but incomplete features to infer
+                                        the
+                                        missing information</strong>.</p>
+                                <p>Let’s consider customer preferences: we can provide our algorithm’s data regarding our current customers’
+                                    shopping
+                                    preferences (which items they were looking for and what they bought) and based on that information, <strong>when
+                                        a
+                                        new customer arrives looking for some item, our machine learning model can provide suggestions as to what
+                                        customer may also like to buy</strong>.</p>
+                                <p>Our team decided to explore these opportunities by developing its own system based on such concepts. <strong>We
+                                    came up with the idea of teaching our model which opinions related to a given topic were positive and which
+                                    were
+                                    negative.</strong> Choosing a topic with which to work is up to the user. Using this system, when new opinions
+                                    arrived our model was able to classify them into previously defined categories. With this information, we
+                                    could
+                                    provide statistics on how opinions changed over time so we could, for example, see how some information about
+                                    a
+                                    given topic affected people’s opinions.</p>
+                                <p><strong>We developed a microservices-based application with the given stack:</strong></p>
+                                <ul>
+                                    <li>Java 8</li>
+                                    <li>Apache Spark (Spark SQL, Spark Mlib)</li>
+                                    <li>Apache Cassandra</li>
+                                    <li>Apache ActiveMQ (communication between services)</li>
+                                    <li>JHipster (basic web app with UI layer out of the box)</li>
+                                    <li>Spring Framework (Boot, MVC, Security)</li>
+                                    <li>Datastax Spark-Cassandra connector</li>
+                                    <li>Crawler4J</li>
+                                    <li>Twitter4J</li>
+                                    <li>Javascript</li>
+                                    <li>AngularJS</li>
+                                </ul>
+                                <p><strong>It contains four modules:</strong></p>
+                                <ol>
+                                    <ol>
+                                        <li><strong>Analyzer</strong> – we’ve used JHipster to kickstart our development. The Yeoman generator
+                                            speeds
+                                            up development. It can create a basic CRUD web application based on Spring Boot from questions which
+                                            are
+                                            asked during the project generation process. It provides REST endpoints, a basic AngularJS-based UI
+                                            (which
+                                            is easy to extend), security configuration, repositories, services and much more. It can also provide
+                                            a
+                                            lot of useful integration code/frameworks out of the box. For example; authentication (3 types),
+                                            database
+                                            (3 types), caching, search engine, WebSockets, Maven/Gradle, Sass, Angular Translate, and testing
+                                            frameworks.
+                                        </li>
+                                    </ol>
+                                </ol>
+                                <ol>
+                                    <ol>
+                                        <li><strong>It serves as the presentation layer for our application. We customized the generated code to
+                                            our
+                                            needs and extended the AngularJS front-end.</strong></li>
+                                    </ol>
+                                </ol>
+                                <ol>
+                                    <ol>
+                                        <li><strong>Crawler</strong> – the purpose of this one is to provide us with data from web pages and
+                                            social
+                                            media (Twitter). We used Crawler4J and Twitter4J. Crawler4J is an open source multi-threaded web
+                                            crawler
+                                            for Java. Twitter4J was used for crawling Twitter API and Twitter Streaming API. These modules convert
+                                            all
+                                            crawled data to entities, used in our application, and store it in a database. We provided a few
+                                            parsers
+                                            for various web pages which we had been crawling during our development process. We used jsoup to
+                                            parse
+                                            HTML from crawled pages.
+                                        </li>
+                                    </ol>
+                                </ol>
+                                <ol>
+                                    <ol>
+                                        <li><strong>Processor</strong> – Here we are using Apache Spark API or, more precisely, two of its
+                                            modules:
+                                            <ul>
+                                                <li>Spark SQL – for filtering our data using search criteria defined by the user.</li>
+                                                <li>Spark Mlib – for machine learning jobs, we are using APIs for algorithms included in this
+                                                    module
+                                                    to perform model creation and the estimation of yet to be classified documents.
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ol>
+                                </ol>
+                                <p>Here we have implemented four algorithms from the <strong>Apache Spark Mlib</strong>:</p>
+                                <ol>
+                                    <ol>
+                                        <ul>
+                                            <li>Linear Regression without validation.</li>
+                                            <li>Cross Validation.</li>
+                                            <li>Train Validation.</li>
+                                            <li>Multilayer Perceptron (an algorithm based on neural networks).</li>
+                                        </ul>
+                                    </ol>
+                                </ol>
+                                <p><strong>It also is connected to Apache ActiveMQ, which allows other modules to ask for jobs that are being
+                                    performed and the return of their results.</strong></p>
+                                <ol>
+                                    <li><strong>Algorithm comparator</strong> – tests algorithms implemented in the processor for accuracy and
+                                        correctness. It uses Apache ActiveMQ to request results for all algorithms (one at the time) and then
+                                        compares
+                                        the algorithms’ accuracy. <strong>We used it to decouple the logic of algorithm comparison from the logic
+                                            of
+                                            algorithm execution.</strong> It also provides REST API for algorithms results visualization (charts).
+                                    </li>
+                                </ol>
+                                <p><strong><br/>
+                                    We came up with following Cassandra schema:</strong></p>
+                                <p>
+                                <center><a href="https://www.pgs-soft.com/wp-content/uploads/2016/10/Cassandra-schema.jpg"><img
+                                        class="alignnone size-full wp-image-16979"
+                                        src="https://www.pgs-soft.com/wp-content/uploads/2016/10/Cassandra-schema.jpg" alt="cassandra-schema"
+                                        width="519" height="386"
+                                        srcset="https://www.pgs-soft.com/wp-content/uploads/2016/10/Cassandra-schema.jpg 519w, https://www.pgs-soft.com/wp-content/uploads/2016/10/Cassandra-schema-300x223.jpg 300w, https://www.pgs-soft.com/wp-content/uploads/2016/10/Cassandra-schema-305x227.jpg 305w"
+                                        sizes="(max-width: 519px) 100vw, 519px"/></a><br/>
+                                    <small>Database Schema</small>
+                                </center>
+                                &nbsp;</p>
+                                <ul>
+                                    <li><strong>Search profiles</strong> – profiles for filtering data predefined by the user.</li>
+                                    <li><strong>Search criteria </strong>– for a given profile, we can define multiple criteria which serve as
+                                        “and”
+                                        relationships.
+                                    </li>
+                                    <li><strong>Documents </strong>– our data crawled/imported from the official repository lands here.</li>
+                                    <li><strong>Results</strong> – after filtering, using a given search profile, all documents which match our
+                                        predefined criteria have their representation in this table. The training process and classification of
+                                        validation data are also performed in this table.
+                                    </li>
+                                    <li><strong>Classification groups</strong> – a table for algorithm comparison, only the comparison module uses
+                                        this one, the rest of the modules are not aware of it. We store the classification of given result
+                                        performed
+                                        by all of our algorithms here.
+                                    </li>
+                                    <li><strong>Algorithm accuracy </strong>– we store the estimated accuracy for all algorithms here.</li>
+                                </ul>
+                                <p>Probably many of you noticed that we&#8217;re using <strong>NoSQL database with a relational schema</strong>.
+                                    We
+                                    have a reason for it. Relations are used for our presentation layer. Having them in one database with data for
+                                    Spark calculations makes our life easier when developing web part of our application and doing experiments for
+                                    the
+                                    next part of this article. (Please, keep in mind, that if our solution would be implemented on production,
+                                    database infrastructure should be split into a relational and non-relational part.)</p>
+                                <p>We also have a pretty standard schema for handling users, authentication, etc.</p>
+                                <h2>System flows</h2>
+                                <p style="text-align: center;"><a
+                                        href="https://www.pgs-soft.com/wp-content/uploads/2016/10/processor-e1476256098991.png"><img
+                                        class="alignnone size-full wp-image-16984"
+                                        src="https://www.pgs-soft.com/wp-content/uploads/2016/10/processor-e1476256098991.png" alt="processor"
+                                        width="1591" height="778"
+                                        srcset="https://www.pgs-soft.com/wp-content/uploads/2016/10/processor-e1476256098991.png 1591w, https://www.pgs-soft.com/wp-content/uploads/2016/10/processor-e1476256098991-300x147.png 300w, https://www.pgs-soft.com/wp-content/uploads/2016/10/processor-e1476256098991-768x376.png 768w, https://www.pgs-soft.com/wp-content/uploads/2016/10/processor-e1476256098991-1024x501.png 1024w, https://www.pgs-soft.com/wp-content/uploads/2016/10/processor-e1476256098991-305x149.png 305w"
+                                        sizes="(max-width: 1591px) 100vw, 1591px"/></a><br/>
+                                    <small>Processor flow diagram</small>
+                                </p>
+                                <p style="text-align: center;"><a
+                                        href="https://www.pgs-soft.com/wp-content/uploads/2016/10/crawler-e1476255994940.png"><img
+                                        class="alignnone size-full wp-image-16981"
+                                        src="https://www.pgs-soft.com/wp-content/uploads/2016/10/crawler-e1476255994940.png" alt="crawler"
+                                        width="1591" height="589"
+                                        srcset="https://www.pgs-soft.com/wp-content/uploads/2016/10/crawler-e1476255994940.png 1591w, https://www.pgs-soft.com/wp-content/uploads/2016/10/crawler-e1476255994940-300x111.png 300w, https://www.pgs-soft.com/wp-content/uploads/2016/10/crawler-e1476255994940-768x284.png 768w, https://www.pgs-soft.com/wp-content/uploads/2016/10/crawler-e1476255994940-1024x379.png 1024w, https://www.pgs-soft.com/wp-content/uploads/2016/10/crawler-e1476255994940-305x113.png 305w"
+                                        sizes="(max-width: 1591px) 100vw, 1591px"/></a><br/>
+                                    <small>Crawler flow diagram</small>
+                                </p>
+                                <p style="text-align: center;"><a
+                                        href="https://www.pgs-soft.com/wp-content/uploads/2016/10/algorithm-comparator-e1476256031748.png"><img
+                                        class="aligncenter size-full wp-image-16980"
+                                        src="https://www.pgs-soft.com/wp-content/uploads/2016/10/algorithm-comparator-e1476256031748.png"
+                                        alt="algorithm-comparator" width="1591" height="614"
+                                        srcset="https://www.pgs-soft.com/wp-content/uploads/2016/10/algorithm-comparator-e1476256031748.png 1591w, https://www.pgs-soft.com/wp-content/uploads/2016/10/algorithm-comparator-e1476256031748-300x116.png 300w, https://www.pgs-soft.com/wp-content/uploads/2016/10/algorithm-comparator-e1476256031748-768x296.png 768w, https://www.pgs-soft.com/wp-content/uploads/2016/10/algorithm-comparator-e1476256031748-1024x395.png 1024w, https://www.pgs-soft.com/wp-content/uploads/2016/10/algorithm-comparator-e1476256031748-305x118.png 305w"
+                                        sizes="(max-width: 1591px) 100vw, 1591px"/></a><br/>
+                                    <small>Algorithm Comparator flow diagram</small>
+                                </p>
+                                <h2>Basic learning flow for algorithms:</h2>
+                                <p style="text-align: center;"><a
+                                        href="https://www.pgs-soft.com/wp-content/uploads/2016/10/gfx-learning-e1476687077570.png"><img
+                                        src="https://www.pgs-soft.com/wp-content/uploads/2016/10/gfx-learning-e1476687077570-1024x308.png"
+                                        alt="gfx-learning" width="1024" height="308" class="aligncenter size-large wp-image-17099"
+                                        srcset="https://www.pgs-soft.com/wp-content/uploads/2016/10/gfx-learning-e1476687077570-1024x308.png 1024w, https://www.pgs-soft.com/wp-content/uploads/2016/10/gfx-learning-e1476687077570-300x90.png 300w, https://www.pgs-soft.com/wp-content/uploads/2016/10/gfx-learning-e1476687077570-768x231.png 768w, https://www.pgs-soft.com/wp-content/uploads/2016/10/gfx-learning-e1476687077570-305x92.png 305w, https://www.pgs-soft.com/wp-content/uploads/2016/10/gfx-learning-e1476687077570.png 1591w"
+                                        sizes="(max-width: 1024px) 100vw, 1024px"/></a><br/>
+                                    <small>Basic learning flow for algorithms</small>
+                                </p>
+                                <p>Raw text is split into words, the words are then converted into feature vectors which contain more information
+                                    than
+                                    just words, such as the count of occurrences. Our learning algorithms use these vectors with another data
+                                    classification, represented as a floating point number, to create the model for our training data. When the
+                                    model
+                                    is finished it is ready to predict classifications for newly arrived data. It provides the prediction of
+                                    classification as a number and our code’s job is to provide an interpretation for it by converting the number
+                                    to a
+                                    classification.</p>
+                                <p>The source code for this project is hosted on our <a
+                                        href="https://github.com/PGSSoft/pgs-blog/tree/master/SparkProject">GitHub</a> repository.</p>
+                                <h2>Summary</h2>
+                                <p>We developed a completely functional system which is capable of gathering data, preparing it for training as
+                                    well
+                                    as estimating a model using prepared data. We’re still playing around with it, checking what we can gain using
+                                    real data. Curious about the results? Stay tuned! The second part of our article will appear soon.</p>
+                                <ul class="social-media-share">
+                                    <li><a class="facebook"
+                                           href="https://www.facebook.com/sharer.php?u=https://www.pgs-soft.com/big-data-and-machine-learning-with-apache-spark-and-cassandra-part-1-architecture/&amp;t=Big+data+and+machine+learning+with+Apache+Spark+and+Cassandra+Part+1+%E2%80%93+Architecture"
+                                           target="_blank"><i class="fa fa-facebook fa-lg"></i></a></li>
+                                    <li><a class="twitter"
+                                           href="https://twitter.com/share?via=pgssoftware&amp;url=https://www.pgs-soft.com/big-data-and-machine-learning-with-apache-spark-and-cassandra-part-1-architecture/&amp;text=Big+data+and+machine+learning+with+Apache+Spark+and+Cassandra+Part+1+%E2%80%93+Architecture"
+                                           target="_blank"><i class="fa fa-twitter fa-lg"></i></a></li>
+                                    <li><a class="googleplus"
+                                           href="https://plus.google.com/share?url=https://www.pgs-soft.com/big-data-and-machine-learning-with-apache-spark-and-cassandra-part-1-architecture/"
+                                           target="_blank"><i class="fa fa-google-plus fa-lg"></i></a></li>
+                                    <li><a class="feed" href="https://www.pgs-soft.com/feed/" target="_blank"><i class="fa fa-rss fa-lg"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="sidebar-widget col-md-3 col-xs-12">
+                                <div class="blog-author"><img class="author-avatar" alt="Piotr Szerszeń"
+                                                              src="https://www.pgs-soft.com/wp-content/uploads/2016/10/PiotrS..jpg">
+                                    <h3>Piotr Szerszeń</h3>
+                                    <p>Java developer at PGS Software. Fan of new technologies and frameworks. <br>In his free time... Wait his
+                                        what?
+                                        :)</p>
+                                    <ul class="social-links"></ul>
+                                </div>
+                                <div class="contact-us">
+                                    <h3>Want to work <br> with our experts?</h3>
+                                    <a class="button-contact" href="https://www.pgs-soft.com/contact-us/">Contact us</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <section id="blog" class="section-holder">
+                <div class="container item-holder">
+                    <h2 class="header-wrap"><span>Last posts</span></h2>
+                    <div class="item-wrap row">
+                        <!-- RELATED POSTS -->
+
+                        <article class="item col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                            <div class="box-pattern">
+                                <div class="item-content box-pattern-gradient">
+                                    <div class="item-thumbnail">
+                                        <a href="https://www.pgs-soft.com/ios-ui-testing-and-why-it-does-not-always-work-a-k-a-pushing-the-limits-of-the-xctest-framework/"><img
+                                                width="1000" height="502"
+                                                src="https://www.pgs-soft.com/wp-content/uploads/2017/02/grafika-do-bloga-1.jpg"
+                                                class="attachment-small size-small wp-post-image" alt=""
+                                                srcset="https://www.pgs-soft.com/wp-content/uploads/2017/02/grafika-do-bloga-1.jpg 1000w, https://www.pgs-soft.com/wp-content/uploads/2017/02/grafika-do-bloga-1-300x151.jpg 300w, https://www.pgs-soft.com/wp-content/uploads/2017/02/grafika-do-bloga-1-768x386.jpg 768w, https://www.pgs-soft.com/wp-content/uploads/2017/02/grafika-do-bloga-1-305x153.jpg 305w"
+                                                sizes="(max-width: 1000px) 100vw, 1000px"/></a>
+                                    </div>
+                                    <div class="item-entry">
+                                        <h1 class="item-entry-title"><a
+                                                href="https://www.pgs-soft.com/ios-ui-testing-and-why-it-does-not-always-work-a-k-a-pushing-the-limits-of-the-xctest-framework/">iOS
+                                            UI Testing and Why It Does Not Always Work: a....</a></h1>
+                                    </div>
+                                    <div class="item-footer">
+                                        <span>February 14, 2017<br/>by Bartosz Janda</span><a
+                                            href="https://www.pgs-soft.com/ios-ui-testing-and-why-it-does-not-always-work-a-k-a-pushing-the-limits-of-the-xctest-framework/"
+                                            class="read-more orange"><i></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="item col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                            <div class="box-pattern">
+                                <div class="item-content box-pattern-gradient">
+                                    <div class="item-thumbnail">
+                                        <a href="https://www.pgs-soft.com/spinnaker/"><img width="1000" height="502"
+                                                                                           src="https://www.pgs-soft.com/wp-content/uploads/2017/02/spinnaker.jpg"
+                                                                                           class="attachment-small size-small wp-post-image" alt=""
+                                                                                           srcset="https://www.pgs-soft.com/wp-content/uploads/2017/02/spinnaker.jpg 1000w, https://www.pgs-soft.com/wp-content/uploads/2017/02/spinnaker-300x151.jpg 300w, https://www.pgs-soft.com/wp-content/uploads/2017/02/spinnaker-768x386.jpg 768w, https://www.pgs-soft.com/wp-content/uploads/2017/02/spinnaker-305x153.jpg 305w"
+                                                                                           sizes="(max-width: 1000px) 100vw, 1000px"/></a>
+                                    </div>
+                                    <div class="item-entry">
+                                        <h1 class="item-entry-title"><a href="https://www.pgs-soft.com/spinnaker/">Spinnaker</a></h1>
+                                    </div>
+                                    <div class="item-footer">
+                                        <span>February 7, 2017<br/>by Adam Karwala</span><a href="https://www.pgs-soft.com/spinnaker/"
+                                                                                            class="read-more orange"><i></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="item col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                            <div class="box-pattern">
+                                <div class="item-content box-pattern-gradient">
+                                    <div class="item-thumbnail">
+                                        <a href="https://www.pgs-soft.com/remote-teams/"><img width="1000" height="502"
+                                                                                              src="https://www.pgs-soft.com/wp-content/uploads/2017/01/StockSnap_VQXYE2ZEHC.jpg"
+                                                                                              class="attachment-small size-small wp-post-image" alt=""
+                                                                                              srcset="https://www.pgs-soft.com/wp-content/uploads/2017/01/StockSnap_VQXYE2ZEHC.jpg 1000w, https://www.pgs-soft.com/wp-content/uploads/2017/01/StockSnap_VQXYE2ZEHC-300x151.jpg 300w, https://www.pgs-soft.com/wp-content/uploads/2017/01/StockSnap_VQXYE2ZEHC-768x386.jpg 768w, https://www.pgs-soft.com/wp-content/uploads/2017/01/StockSnap_VQXYE2ZEHC-305x153.jpg 305w"
+                                                                                              sizes="(max-width: 1000px) 100vw, 1000px"/></a>
+                                    </div>
+                                    <div class="item-entry">
+                                        <h1 class="item-entry-title"><a href="https://www.pgs-soft.com/remote-teams/">Remote Teams</a></h1>
+                                    </div>
+                                    <div class="item-footer">
+                                        <span>January 31, 2017<br/>by Magda Respondek</span><a href="https://www.pgs-soft.com/remote-teams/"
+                                                                                               class="read-more orange"><i></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+            <section class="section-holder section-spacer dark-gray-bg">
+                <div class="container">
+                    <div class="tag-cloud">
+                        <a href='https://www.pgs-soft.com/tags/net/' class='tag-link-7 tag-link-position-1' title='' style='font-size: 27pt;'>.NET</a>
+                        <a href='https://www.pgs-soft.com/tags/afterbuild/' class='tag-link-32 tag-link-position-2' title='' style='font-size: 11pt;'>AfterBuild</a>
+                        <a href='https://www.pgs-soft.com/tags/agile/' class='tag-link-33 tag-link-position-3' title='' style='font-size: 15.8pt;'>agile</a>
+                        <a href='https://www.pgs-soft.com/tags/ajax/' class='tag-link-35 tag-link-position-4' title=''
+                           style='font-size: 15.8pt;'>ajax</a> <a href='https://www.pgs-soft.com/tags/ajax-control-toolkit/'
+                                                                  class='tag-link-36 tag-link-position-5' title='' style='font-size: 11pt;'>Ajax
+                        Control Toolkit</a> <a href='https://www.pgs-soft.com/tags/amazon/' class='tag-link-37 tag-link-position-6' title=''
+                                               style='font-size: 15.8pt;'>Amazon</a> <a href='https://www.pgs-soft.com/tags/android-2/'
+                                                                                        class='tag-link-39 tag-link-position-7' title=''
+                                                                                        style='font-size: 17.4pt;'>Android</a> <a
+                            href='https://www.pgs-soft.com/tags/apache-spark/' class='tag-link-357 tag-link-position-8' title=''
+                            style='font-size: 13.88pt;'>Apache Spark</a> <a href='https://www.pgs-soft.com/tags/apple/'
+                                                                            class='tag-link-40 tag-link-position-9' title=''
+                                                                            style='font-size: 17.4pt;'>Apple</a> <a
+                            href='https://www.pgs-soft.com/tags/application-development/' class='tag-link-42 tag-link-position-10' title=''
+                            style='font-size: 13.88pt;'>application development</a> <a href='https://www.pgs-soft.com/tags/asp-net/'
+                                                                                       class='tag-link-44 tag-link-position-11' title=''
+                                                                                       style='font-size: 23.96pt;'>asp.net</a> <a
+                            href='https://www.pgs-soft.com/tags/aspect-programming/' class='tag-link-46 tag-link-position-12' title=''
+                            style='font-size: 13.88pt;'>aspect programming</a> <a href='https://www.pgs-soft.com/tags/aspx/'
+                                                                                  class='tag-link-47 tag-link-position-13' title=''
+                                                                                  style='font-size: 20.6pt;'>ASPX</a> <a
+                            href='https://www.pgs-soft.com/tags/awstats/' class='tag-link-49 tag-link-position-14' title='' style='font-size: 11pt;'>AWStats</a>
+                        <a href='https://www.pgs-soft.com/tags/beforebuild/' class='tag-link-52 tag-link-position-15' title=''
+                           style='font-size: 11pt;'>BeforeBuild</a> <a href='https://www.pgs-soft.com/tags/big-data/'
+                                                                       class='tag-link-356 tag-link-position-16' title='' style='font-size: 13.88pt;'>Big
+                        Data</a> <a href='https://www.pgs-soft.com/tags/c/' class='tag-link-58 tag-link-position-17' title=''
+                                    style='font-size: 11pt;'>c#</a> <a href='https://www.pgs-soft.com/tags/cassandra/'
+                                                                       class='tag-link-358 tag-link-position-18' title='' style='font-size: 13.88pt;'>Cassandra</a>
+                        <a href='https://www.pgs-soft.com/tags/charity/' class='tag-link-62 tag-link-position-19' title='' style='font-size: 11pt;'>charity</a>
+                        <a href='https://www.pgs-soft.com/tags/conference/' class='tag-link-368 tag-link-position-20' title=''
+                           style='font-size: 13.88pt;'>Conference</a> <a href='https://www.pgs-soft.com/tags/database/'
+                                                                         class='tag-link-77 tag-link-position-21' title='' style='font-size: 11pt;'>database</a>
+                        <a href='https://www.pgs-soft.com/tags/datacontractserializer/' class='tag-link-78 tag-link-position-22' title=''
+                           style='font-size: 11pt;'>DataContractSerializer</a> <a href='https://www.pgs-soft.com/tags/ddd/'
+                                                                                  class='tag-link-375 tag-link-position-23' title=''
+                                                                                  style='font-size: 15.8pt;'>DDD</a> <a
+                            href='https://www.pgs-soft.com/tags/design/' class='tag-link-80 tag-link-position-24' title='' style='font-size: 15.8pt;'>design</a>
+                        <a href='https://www.pgs-soft.com/tags/estimations/' class='tag-link-88 tag-link-position-25' title=''
+                           style='font-size: 11pt;'>estimations</a> <a href='https://www.pgs-soft.com/tags/firebug/'
+                                                                       class='tag-link-94 tag-link-position-26' title='' style='font-size: 13.88pt;'>Firebug</a>
+                        <a href='https://www.pgs-soft.com/tags/internship/' class='tag-link-114 tag-link-position-27' title=''
+                           style='font-size: 13.88pt;'>internship</a> <a href='https://www.pgs-soft.com/tags/ios-2/'
+                                                                         class='tag-link-115 tag-link-position-28' title=''
+                                                                         style='font-size: 17.4pt;'>iOS</a> <a
+                            href='https://www.pgs-soft.com/tags/java/' class='tag-link-11 tag-link-position-29' title='' style='font-size: 19.8pt;'>Java</a>
+                        <a href='https://www.pgs-soft.com/tags/javascript/' class='tag-link-122 tag-link-position-30' title=''
+                           style='font-size: 13.88pt;'>Javascript</a> <a href='https://www.pgs-soft.com/tags/jenkins/'
+                                                                         class='tag-link-354 tag-link-position-31' title=''
+                                                                         style='font-size: 13.88pt;'>Jenkins</a> <a
+                            href='https://www.pgs-soft.com/tags/jquery/' class='tag-link-123 tag-link-position-32' title=''
+                            style='font-size: 17.4pt;'>jquery</a> <a href='https://www.pgs-soft.com/tags/mocking/'
+                                                                     class='tag-link-136 tag-link-position-33' title='' style='font-size: 15.8pt;'>mocking</a>
+                        <a href='https://www.pgs-soft.com/tags/mvc/' class='tag-link-139 tag-link-position-34' title='' style='font-size: 18.68pt;'>MVC</a>
+                        <a href='https://www.pgs-soft.com/tags/nearshoring/' class='tag-link-141 tag-link-position-35' title=''
+                           style='font-size: 22.2pt;'>Nearshoring</a> <a href='https://www.pgs-soft.com/tags/php/'
+                                                                         class='tag-link-5 tag-link-position-36' title='' style='font-size: 15.8pt;'>PHP</a>
+                        <a href='https://www.pgs-soft.com/tags/rzeszow/' class='tag-link-172 tag-link-position-37' title=''
+                           style='font-size: 13.88pt;'>Rzeszow</a> <a href='https://www.pgs-soft.com/tags/scrum/'
+                                                                      class='tag-link-174 tag-link-position-38' title='' style='font-size: 18.68pt;'>scrum</a>
+                        <a href='https://www.pgs-soft.com/tags/sql/' class='tag-link-185 tag-link-position-39' title=''
+                           style='font-size: 15.8pt;'>sql</a> <a href='https://www.pgs-soft.com/tags/tips-tricks/'
+                                                                 class='tag-link-193 tag-link-position-40' title='' style='font-size: 25.88pt;'>tips
+                        &amp; tricks</a> <a href='https://www.pgs-soft.com/tags/training/' class='tag-link-196 tag-link-position-41' title=''
+                                            style='font-size: 13.88pt;'>training</a> <a href='https://www.pgs-soft.com/tags/unit-testing/'
+                                                                                        class='tag-link-198 tag-link-position-42' title=''
+                                                                                        style='font-size: 20.6pt;'>unit testing</a> <a
+                            href='https://www.pgs-soft.com/tags/visual-studio/' class='tag-link-203 tag-link-position-43' title=''
+                            style='font-size: 18.68pt;'>visual studio</a> <a href='https://www.pgs-soft.com/tags/wroclaw/'
+                                                                             class='tag-link-217 tag-link-position-44' title=''
+                                                                             style='font-size: 18.68pt;'>Wroclaw</a> <a
+                            href='https://www.pgs-soft.com/tags/xml/' class='tag-link-219 tag-link-position-45' title='' style='font-size: 15.8pt;'>xml</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+    <!-- main -->
+    <!-- main -->
+    <footer class="main" data-role="footer">
+        <div class="container">
+            <div class="row">
+                <nav class="col-lg-3 col-md-3 col-xs-12 col-sm-4">
+                    <ul id="footer-menu">
+                        <li id="menu-item-17976" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17976"><a
+                                href="https://kariera.pgs-soft.com">Careers</a></li>
+                        <li id="menu-item-16005" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-16005"><a
+                                href="https://www.pgs-soft.com/term-of-use/">Terms of use</a></li>
+                        <li id="menu-item-15224" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15224"><a
+                                href="https://www.pgs-soft.com/investor-relations/">Investor relations</a></li>
+                        <li id="menu-item-233" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-233"><a
+                                href="https://www.pgs-soft.com/privacy-policy/">Privacy policy</a></li>
+                        <li id="menu-item-15225" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15225"><a
+                                href="https://www.pgs-soft.com/videos/">Video</a></li>
+                        <li id="menu-item-232" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-232"><a
+                                href="https://www.pgs-soft.com/site-map/">Sitemap</a></li>
+                        <li id="menu-item-15223"
+                            class="menu-item menu-item-type-post_type menu-item-object-page current_page_parent menu-item-15223 active "><a
+                                href="https://www.pgs-soft.com/blog/">Blog</a></li>
+                    </ul>
+                </nav>
+                <div class="social col-lg-3 col-md-3 col-xs-12 col-sm-4">
+                    <p>Follow us</p>
+                    <ul class="social-nav">
+                        <li class="fb">
+                            <a href="https://www.facebook.com/pgs.software" title="Facebook" target="_blank">
+                                <i class="fa fa-facebook fa-lg first-icon"></i>
+                                <i class="fa fa-facebook fa-lg hover-icon"></i>
+                            </a>
+                        </li>
+                        <li class="in">
+                            <a href="https://www.linkedin.com/company/pgs-software-s-a-" title="LinkedIN" target="_blank">
+                                <i class="fa fa-linkedin fa-lg first-icon"></i>
+                                <i class="fa fa-linkedin fa-lg hover-icon"></i>
+                            </a>
+                        </li>
+                        <li class="tt">
+                            <a href="https://twitter.com/pgssoftware" title="Twitter" target="_blank">
+                                <i class="fa fa-twitter fa-lg first-icon"></i>
+                                <i class="fa fa-twitter fa-lg hover-icon"></i>
+                            </a>
+                        </li>
+                        <li class="yt">
+                            <a href="https://www.youtube.com/user/PGSSoft" title="YouTube" target="_blank">
+                                <i class="fa fa-youtube fa-lg first-icon"></i>
+                                <i class="fa fa-youtube fa-lg hover-icon"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="share col-lg-2 col-md-2 col-xs-6 col-sm-4">
+                    <ul class="price">
+                        <li><span>Share price:</span><span class="highlight">15.00 PLN</span></li>
+                        <li><span>Change:</span><span style="color:#E33469" class="value">-1.12%</span></li>
+                    </ul>
+                </div>
+                <div class=" share col-lg-4 col-md-4 col-sm-12 col-xs-6">
+                    <div class="footer-logos">
+                        <a href="https://www.gpw.pl/karta_spolki_en/PLSFTWR00015/"
+                           title="GPW" target="_blank">
+                            <img src="https://www.pgs-soft.com/wp-content/themes/pgstemplate/img/footer/gpw_en.png" alt="GPW"/>
+                        </a>
+                        <a href="https://partner.microsoft.com/pl-PL/" target="_blank" title="Microsoft Partner">
+                            <img src="https://www.pgs-soft.com/wp-content/themes/pgstemplate/img/footer/mslogo.png" alt="Microsoft Partner"/>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                Copyright &copy; PGS Software 2017
+            </div>
+        </div>
+        <!-- container -->
+    </footer>
+    <!-- main -->
+    <div id="cookies_policy">
+        <span class="banner_close">x</span>
+        <div>
+            <h3>Cookies Policy</h3>
+            <p>This site uses cookies to help us provide best possible browsing experience. By continuing to browse this site you are agreeing to our
+                use of cookies. You can always delete or disable cookies in your internet browser settings. <a
+                        href='/en/privacy-policy/#cookie-policy'>[Read more]</a> reading our Privacy Policy.</p>
+        </div>
+    </div>
+</div>
+<!-- PAGE -->
+<script type='text/javascript'
+        src='https://www.pgs-soft.com/wp-content/plugins/contact-form-7/includes/js/jquery.form.min.js?ver=3.51.0-2014.06.20'></script>
+<script type='text/javascript'>
+    /* <![CDATA[ */
+    var _wpcf7 = {"recaptcha": {"messages": {"empty": "Please verify that you are not a robot."}}};
+    /* ]]> */
+</script>
+<script type='text/javascript' src='https://www.pgs-soft.com/wp-content/plugins/contact-form-7/includes/js/scripts.js?ver=4.6'></script>
+<script type='text/javascript'
+        src='https://www.pgs-soft.com/wp-content/plugins/investor-relations-manager/public/dist/lib/js/jquery.cookie.js?ver=4.7.2'></script>
+<script type='text/javascript' src='https://www.pgs-soft.com/wp-content/themes/pgstemplate/js/jquery-ui-1.10.3.min.js?ver=1.10.3'></script>
+<script type='text/javascript'>
+    /* <![CDATA[ */
+    var wpData = {
+        "templateUrl": "https:\/\/www.pgs-soft.com\/wp-content\/themes\/pgstemplate",
+        "site_url": "https:\/\/www.pgs-soft.com",
+        "current_language": "pl"
+    };
+    var i18nObjIRM = {
+        "field_required": "Field is required.",
+        "field_valid": "Field is not correct.",
+        "name_required": "Name is required.",
+        "name_valid": "Name is not correct.",
+        "email_required": "E-mail is required.",
+        "message_required": "Message content is required.",
+        "email_valid": "E-mail is not correct.",
+        "phonenumber_valid": "Phone number is not correct.",
+        "sending": "Sending...",
+        "current_language": "pl"
+    };
+    /* ]]> */
+</script>
+<script type='text/javascript' src='https://www.pgs-soft.com/wp-content/plugins/investor-relations-manager/public/dist/js/app.js?ver=v.0.3'></script>
+<script type='text/javascript' src='https://www.pgs-soft.com/wp-content/plugins/wp-syntax/js/wp-syntax.js?ver=1.1'></script>
+<script type='text/javascript' src='https://www.pgs-soft.com/wp-content/themes/pgstemplate/js/intercom_live.js?ver=170105-114109'></script>
+<script type='text/javascript' src='https://www.pgs-soft.com/wp-content/themes/pgstemplate/js/vwo_optimizer.js?ver=4.7.2'></script>
+<script type='text/javascript'>
+    /* <![CDATA[ */
+    var templateObj = {
+        "templateUrl": "https:\/\/www.pgs-soft.com\/wp-content\/themes\/pgstemplate",
+        "site_url": "https:\/\/www.pgs-soft.com",
+        "current_language": "en",
+        "showi18n": "More",
+        "experience_link": "\/en\/experience\/"
+    };
+    /* ]]> */
+</script>
+<script type='text/javascript' src='https://www.pgs-soft.com/wp-content/themes/pgstemplate/js/custom/script.min.js?ver=170209-162604'></script>
+<script type='text/javascript'>
+    /* <![CDATA[ */
+    var templateObj = {
+        "templateUrl": "https:\/\/www.pgs-soft.com\/wp-content\/themes\/pgstemplate",
+        "site_url": "https:\/\/www.pgs-soft.com",
+        "current_language": "en",
+        "showi18n": "More",
+        "experience_link": "\/en\/experience\/"
+    };
+    var i18nObject = {"talents": "talents"};
+    /* ]]> */
+</script>
+<script type='text/javascript' src='https://www.pgs-soft.com/wp-content/themes/pgstemplate/js/custom/statsHelper.min.js?ver=170209-162604'></script>
+<script type='text/javascript' src='https://www.pgs-soft.com/wp-content/themes/pgstemplate/js/jquery.cookie.min.js?ver=4.7.2'></script>
+<script type='text/javascript' src='https://www.pgs-soft.com/wp-content/themes/pgstemplate/js/jquery.flexslider-min.js?ver=4.7.2'></script>
+<script type='text/javascript' src='https://www.pgs-soft.com/wp-content/themes/pgstemplate/js/custom/menu.min.js?ver=170209-162603'></script>
+<script type='text/javascript' src='https://www.pgs-soft.com/wp-content/themes/pgstemplate/js/custom/submenu.min.js?ver=170209-162604'></script>
+<script type='text/javascript' src='https://www.pgs-soft.com/wp-content/themes/pgstemplate/js/owl.carousel.min.js?ver=4.7.2'></script>
+<script type='text/javascript' src='https://www.pgs-soft.com/wp-content/themes/pgstemplate/js/custom/ios-fix.min.js?ver=170209-162600'></script>
+<script type='text/javascript' src='https://www.pgs-soft.com/wp-includes/js/wp-embed.min.js?ver=4.7.2'></script>
+</body>
+</html>

@@ -66,24 +66,24 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>${junit.jupiter.version}</version>
+            <version>LATEST</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>${junit.jupiter.version}</version>
+            <version>LATEST</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.vintage</groupId>
             <artifactId>junit-vintage-engine</artifactId>
-            <version>${junit.vintage.version}</version>
+            <version>LATEST</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
+            <version>LATEST</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -117,17 +117,17 @@
                     <dependency>
                         <groupId>org.junit.platform</groupId>
                         <artifactId>junit-platform-surefire-provider</artifactId>
-                        <version>${junit.platform.version}</version>
+                        <version>LATEST</version>
                     </dependency>
                     <dependency>
                         <groupId>org.junit.jupiter</groupId>
                         <artifactId>junit-jupiter-engine</artifactId>
-                        <version>${junit.jupiter.version}</version>
+                        <version>LATEST</version>
                     </dependency>
                     <dependency>
                         <groupId>org.junit.vintage</groupId>
                         <artifactId>junit-vintage-engine</artifactId>
-                        <version>${junit.vintage.version}</version>
+                        <version>LATEST</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -154,17 +154,17 @@
                             <dependency>
                                 <groupId>org.junit.platform</groupId>
                                 <artifactId>junit-platform-surefire-provider</artifactId>
-                                <version>${junit.platform.version}</version>
+                                <version>LATEST</version>
                             </dependency>
                             <dependency>
                                 <groupId>org.junit.jupiter</groupId>
                                 <artifactId>junit-jupiter-engine</artifactId>
-                                <version>${junit.jupiter.version}</version>
+                                <version>LATEST</version>
                             </dependency>
                             <dependency>
                                 <groupId>org.junit.vintage</groupId>
                                 <artifactId>junit-vintage-engine</artifactId>
-                                <version>${junit.vintage.version}</version>
+                                <version>LATEST</version>
                             </dependency>
                         </dependencies>
                     </plugin>
