@@ -480,43 +480,43 @@
                                 </p>
                                 <p><strong>SET UP:</strong></p>
                                 <p>To use both JUnits in maven project you need to add these dependencies in your pom.xml</p>
-                                <xmp class="prettyprint language-xml linenums:65">
-                                    <dependency>
-                                        <groupId>org.junit.jupiter</groupId>
-                                        <artifactId>junit-jupiter-api</artifactId>
-                                        <version>LATEST</version>
-                                        <scope>test</scope>
-                                    </dependency>
-                                    <dependency>
-                                        <groupId>org.junit.jupiter</groupId>
-                                        <artifactId>junit-jupiter-engine</artifactId>
-                                        <version>LATEST</version>
-                                        <scope>test</scope>
-                                    </dependency>
-                                    <dependency>
-                                        <groupId>org.junit.vintage</groupId>
-                                        <artifactId>junit-vintage-engine</artifactId>
-                                        <version>LATEST</version>
-                                    </dependency>
-                                    <dependency>
-                                        <groupId>junit</groupId>
-                                        <artifactId>junit</artifactId>
-                                        <version>LATEST</version>
-                                        <scope>test</scope>
-                                    </dependency>
-                                    <dependency>
-                                        <groupId>org.assertj</groupId>
-                                        <artifactId>assertj-core</artifactId>
-                                        <version>LATEST</version>
-                                        <scope>test</scope>
-                                    </dependency>
-                                    <dependency>
-                                        <groupId>org.mockito</groupId>
-                                        <artifactId>mockito-all</artifactId>
-                                        <version>LATEST</version>
-                                        <scope>test</scope>
-                                    </dependency>
-                                </xmp>
+                                <pre class="prettyprint linenums:65"><xmp class="language-xml">
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>LATEST</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-engine</artifactId>
+        <version>LATEST</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.junit.vintage</groupId>
+        <artifactId>junit-vintage-engine</artifactId>
+        <version>LATEST</version>
+    </dependency>
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>LATEST</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <version>LATEST</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-all</artifactId>
+        <version>LATEST</version>
+        <scope>test</scope>
+    </dependency>
+                                </xmp></pre>
 
                                 <p>This kind of configuration lets you run the JUnit 4 test:</p>
                                 <pre class="prettyprint linenums">
@@ -533,6 +533,9 @@ public class VintageTest {
                                 </code></pre>
                                 <p><strong>What's new? What's different?</strong></p>
                                 <ol>
+                                    <li><strong>Methods can be package-private:</strong>Yes, no need to typing <code>public</code> all the time ano
+                                        more.
+                                    </li>
                                     <li><strong>Parameter's order:</strong> Now the error message, if occurs, is the last parameter, not the first.
                                     </li>
                                     <li>
@@ -582,6 +585,190 @@ public class E01NewAssertEqualsOrderTest {
     }
 }
                                     </code></pre>
+                                    <li><strong>New lifecycle names:</strong>Annotation names has been changed. I think mostly for easier sensing the
+                                        difference when project contains tests using both JUnits. <br/> Here is how it changed:
+                                        <ul>
+                                            <li><code>@BeforeClass</code> --> <code>@BeforeAll</code></li>
+                                            <li><code>@Before</code> --> <code>@BeforeEach</code></li>
+                                            <li><code>@After</code> --> <code>@AfterEach</code></li>
+                                            <li><code>@AfterClass</code> --> <code>@AfterAll</code></li>
+                                        </ul>
+                                    </li>
+                                    <pre class="prettyprint linenums"><code class="language-java">
+package com.pgs.junit5.examples;
+
+import lombok.extern.log4j.Log4j2;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+@Log4j2
+public class E02NewLifecycleNamesTest {
+    @BeforeAll
+    public static void beforeAll() {
+        log.debug("beforeAll");
+    }
+
+    @BeforeEach
+    public void beforeEach() {
+        log.debug("beforeEach");
+    }
+
+    @AfterEach
+    public void afterEach() {
+        log.debug("afterEach");
+    }
+
+    @AfterAll
+    public static void afterAll() {
+        log.debug("afterAll");
+    }
+
+    @Test
+    void test() {
+        log.debug("testing");
+    }
+}
+                                    </code></pre>
+                                    <li><strong>Nested tests:</strong>Nested tests inherits <code>@BeforeAll, @BeforeEach, @AfterEach and
+                                        @AfterAll</code>.
+                                    </li>
+                                    <p>So the code:</p>
+                                    <pre class="prettyprint linenums"><code class="language-java">
+package com.pgs.junit5.examples;
+
+import com.pgs.junit5.examples.extensions.tags.Special;
+import lombok.extern.log4j.Log4j2;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+@Log4j2
+public class E03LifecycleInheritanceDemoTest {
+
+    @BeforeAll
+    public static void beforeAll() {
+        log.debug("beforeAll");
+    }
+
+    @BeforeEach
+    public void beforeEach() {
+        log.debug("beforeEach");
+    }
+
+    @AfterEach
+    public void afterEach() {
+        log.debug("afterEach");
+    }
+
+    @AfterAll
+    public static void afterAll() {
+        log.debug("afterAll");
+    }
+
+    @Test
+    void test() {
+        log.debug("testing");
+    }
+
+    @Nested
+    class NestedTest {
+
+        @BeforeEach
+        public void beforeEach() {
+            log.debug("\tnested beforeEach");
+        }
+
+        @AfterEach
+        public void afterEach() {
+            log.debug("\tnested afterEach");
+        }
+
+        @Special
+        @Test
+        void test() {
+            log.debug("\tnested testing");
+        }
+    }
+
+    @Nested
+    class AnotherNestedTest {
+
+        @BeforeEach
+        public void beforeEach() {
+            log.debug("\tanother nested beforeEach");
+        }
+
+        @AfterEach
+        public void afterEach() {
+            log.debug("\tanother nested afterEach");
+        }
+
+        @Test
+        void test() {
+            log.debug("\tanother nested testing");
+        }
+    }
+}
+
+                                    </code></pre>
+                                    <p>Will produce such output:</p>
+                                    <pre class="prettyprint linenums" style="font-size: 9px">
+15:32:13.504 [main] DEBUG com.pgs.junit5.examples.E03LifecycleInheritanceDemoTest - beforeAll
+15:32:13.514 [main] DEBUG com.pgs.junit5.examples.E03LifecycleInheritanceDemoTest - beforeEach
+15:32:13.517 [main] DEBUG com.pgs.junit5.examples.E03LifecycleInheritanceDemoTest - testing
+15:32:13.524 [main] DEBUG com.pgs.junit5.examples.E03LifecycleInheritanceDemoTest - afterEach
+15:32:13.535 [main] DEBUG com.pgs.junit5.examples.E03LifecycleInheritanceDemoTest - beforeEach
+15:32:13.535 [main] DEBUG com.pgs.junit5.examples.E03LifecycleInheritanceDemoTest - 	another nested beforeEach
+15:32:13.535 [main] DEBUG com.pgs.junit5.examples.E03LifecycleInheritanceDemoTest - 	another nested testing
+15:32:13.536 [main] DEBUG com.pgs.junit5.examples.E03LifecycleInheritanceDemoTest - 	another nested afterEach
+15:32:13.536 [main] DEBUG com.pgs.junit5.examples.E03LifecycleInheritanceDemoTest - afterEach
+15:32:13.543 [main] DEBUG com.pgs.junit5.examples.E03LifecycleInheritanceDemoTest - beforeEach
+15:32:13.544 [main] DEBUG com.pgs.junit5.examples.E03LifecycleInheritanceDemoTest - 	nested beforeEach
+15:32:13.544 [main] DEBUG com.pgs.junit5.examples.E03LifecycleInheritanceDemoTest - 	nested testing
+15:32:13.544 [main] DEBUG com.pgs.junit5.examples.E03LifecycleInheritanceDemoTest - 	nested afterEach
+15:32:13.544 [main] DEBUG com.pgs.junit5.examples.E03LifecycleInheritanceDemoTest - afterEach
+15:32:13.547 [main] DEBUG com.pgs.junit5.examples.E03LifecycleInheritanceDemoTest - afterAllDisconnected from the target VM, address: '127.0.0.1:61610', transport: 'socket'
+                                    </pre>
+                                    <li><strong>Group assertion:</strong>We can put multiple assertions in one <code>assertAll()</code> method. This
+                                        will force to execute all the assertions in group instead of exiting after the first fail. Thanks to this we
+                                        can have aggregated report of failing assertions.
+                                    </li>
+                                    <pre class="prettyprint linenums"><code class="language-java">
+package com.pgs.junit5.examples;
+
+import com.google.common.collect.ImmutableList;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class E04AssertAllTest {
+
+    @Test
+    public void shouldReturnCollectionOfSizeWithFixedFirstElement() {
+        List<String> actual = ImmutableList.of("AAA", "anything");
+
+        assertAll("collection",
+                () -> assertEquals(3, actual.size(), "Size must be 3"),
+                () -> assertEquals("AZZ", actual.get(0), "AAA element must be first")
+        );
+    }
+}
+                                    </code></pre>
+                                    <pre class="prettyprint linenums" style="font-size: 9px"><xmp>
+org.opentest4j.MultipleFailuresError: collection (2 failures)
+	Size must be 3 ==> expected: <3> but was: <2>
+	AAA element must be first ==> expected: <AZZ> but was: <AAA>
+                                    </xmp></pre>
+
                                 </ol>
 
                                 <ul class="social-media-share">
