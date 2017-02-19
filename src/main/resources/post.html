@@ -102,6 +102,7 @@
             background: none !important;
             padding: 0 !important;
         }
+
         li.L0, li.L1, li.L2, li.L3,
         li.L5, li.L6, li.L7, li.L8 {
             list-style-type: decimal !important;
@@ -480,252 +481,109 @@
                                 <p><strong>SET UP:</strong></p>
                                 <p>To use both JUnits in maven project you need to add these dependencies in your pom.xml</p>
                                 <xmp class="prettyprint language-xml linenums:65">
-    <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter-api</artifactId>
-        <version>LATEST</version>
-        <scope>test</scope>
-    </dependency>
-    <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter-engine</artifactId>
-        <version>LATEST</version>
-        <scope>test</scope>
-    </dependency>
-    <dependency>
-        <groupId>org.junit.vintage</groupId>
-        <artifactId>junit-vintage-engine</artifactId>
-        <version>LATEST</version>
-    </dependency>
-    <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>LATEST</version>
-        <scope>test</scope>
-    </dependency>
-    <dependency>
-        <groupId>org.assertj</groupId>
-        <artifactId>assertj-core</artifactId>
-        <version>LATEST</version>
-        <scope>test</scope>
-    </dependency>
-    <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-all</artifactId>
-        <version>LATEST</version>
-        <scope>test</scope>
-    </dependency>
+                                    <dependency>
+                                        <groupId>org.junit.jupiter</groupId>
+                                        <artifactId>junit-jupiter-api</artifactId>
+                                        <version>LATEST</version>
+                                        <scope>test</scope>
+                                    </dependency>
+                                    <dependency>
+                                        <groupId>org.junit.jupiter</groupId>
+                                        <artifactId>junit-jupiter-engine</artifactId>
+                                        <version>LATEST</version>
+                                        <scope>test</scope>
+                                    </dependency>
+                                    <dependency>
+                                        <groupId>org.junit.vintage</groupId>
+                                        <artifactId>junit-vintage-engine</artifactId>
+                                        <version>LATEST</version>
+                                    </dependency>
+                                    <dependency>
+                                        <groupId>junit</groupId>
+                                        <artifactId>junit</artifactId>
+                                        <version>LATEST</version>
+                                        <scope>test</scope>
+                                    </dependency>
+                                    <dependency>
+                                        <groupId>org.assertj</groupId>
+                                        <artifactId>assertj-core</artifactId>
+                                        <version>LATEST</version>
+                                        <scope>test</scope>
+                                    </dependency>
+                                    <dependency>
+                                        <groupId>org.mockito</groupId>
+                                        <artifactId>mockito-all</artifactId>
+                                        <version>LATEST</version>
+                                        <scope>test</scope>
+                                    </dependency>
                                 </xmp>
 
+                                <p>This kind of configuration lets you run the JUnit 4 test:</p>
+                                <pre class="prettyprint linenums">
+                                    <code class="language-java">
+package com.pgs.junit5.examples.vintage;
 
-                                <p><strong>Big data and machine learning </strong>are topics rapidly growing in popularity. <strong>Big data’s
-                                    purpose
-                                    is to collect massive amounts of domain-specific data</strong>, containing lots of useful information. For
-                                    example, we can use all the customer data of a retail shop to find out what a retailer can do to <strong>increase
-                                        sales and maximize income</strong>.</p>
-                                <p><strong>Machine learning</strong> is ideal for exploiting the potential of big data. It is a set of specific
-                                    algorithms which use training data to create a model describing every piece of information as a set of
-                                    features.
-                                    Based on that model,<strong> you can use other data with a similar structure but incomplete features to infer
-                                        the
-                                        missing information</strong>.</p>
-                                <p>Let’s consider customer preferences: we can provide our algorithm’s data regarding our current customers’
-                                    shopping
-                                    preferences (which items they were looking for and what they bought) and based on that information, <strong>when
-                                        a
-                                        new customer arrives looking for some item, our machine learning model can provide suggestions as to what
-                                        customer may also like to buy</strong>.</p>
-                                <p>Our team decided to explore these opportunities by developing its own system based on such concepts. <strong>We
-                                    came up with the idea of teaching our model which opinions related to a given topic were positive and which
-                                    were
-                                    negative.</strong> Choosing a topic with which to work is up to the user. Using this system, when new opinions
-                                    arrived our model was able to classify them into previously defined categories. With this information, we
-                                    could
-                                    provide statistics on how opinions changed over time so we could, for example, see how some information about
-                                    a
-                                    given topic affected people’s opinions.</p>
-                                <p><strong>We developed a microservices-based application with the given stack:</strong></p>
-                                <ul>
-                                    <li>Java 8</li>
-                                    <li>Apache Spark (Spark SQL, Spark Mlib)</li>
-                                    <li>Apache Cassandra</li>
-                                    <li>Apache ActiveMQ (communication between services)</li>
-                                    <li>JHipster (basic web app with UI layer out of the box)</li>
-                                    <li>Spring Framework (Boot, MVC, Security)</li>
-                                    <li>Datastax Spark-Cassandra connector</li>
-                                    <li>Crawler4J</li>
-                                    <li>Twitter4J</li>
-                                    <li>Javascript</li>
-                                    <li>AngularJS</li>
-                                </ul>
-                                <p><strong>It contains four modules:</strong></p>
+import org.junit.Test;
+
+public class VintageTest {
+    @Test
+    public void testSomething() {
+    }
+}
+                                </code></pre>
+                                <p><strong>What's new? What's different?</strong></p>
                                 <ol>
-                                    <ol>
-                                        <li><strong>Analyzer</strong> – we’ve used JHipster to kickstart our development. The Yeoman generator
-                                            speeds
-                                            up development. It can create a basic CRUD web application based on Spring Boot from questions which
-                                            are
-                                            asked during the project generation process. It provides REST endpoints, a basic AngularJS-based UI
-                                            (which
-                                            is easy to extend), security configuration, repositories, services and much more. It can also provide
-                                            a
-                                            lot of useful integration code/frameworks out of the box. For example; authentication (3 types),
-                                            database
-                                            (3 types), caching, search engine, WebSockets, Maven/Gradle, Sass, Angular Translate, and testing
-                                            frameworks.
-                                        </li>
-                                    </ol>
-                                </ol>
-                                <ol>
-                                    <ol>
-                                        <li><strong>It serves as the presentation layer for our application. We customized the generated code to
-                                            our
-                                            needs and extended the AngularJS front-end.</strong></li>
-                                    </ol>
-                                </ol>
-                                <ol>
-                                    <ol>
-                                        <li><strong>Crawler</strong> – the purpose of this one is to provide us with data from web pages and
-                                            social
-                                            media (Twitter). We used Crawler4J and Twitter4J. Crawler4J is an open source multi-threaded web
-                                            crawler
-                                            for Java. Twitter4J was used for crawling Twitter API and Twitter Streaming API. These modules convert
-                                            all
-                                            crawled data to entities, used in our application, and store it in a database. We provided a few
-                                            parsers
-                                            for various web pages which we had been crawling during our development process. We used jsoup to
-                                            parse
-                                            HTML from crawled pages.
-                                        </li>
-                                    </ol>
-                                </ol>
-                                <ol>
-                                    <ol>
-                                        <li><strong>Processor</strong> – Here we are using Apache Spark API or, more precisely, two of its
-                                            modules:
-                                            <ul>
-                                                <li>Spark SQL – for filtering our data using search criteria defined by the user.</li>
-                                                <li>Spark Mlib – for machine learning jobs, we are using APIs for algorithms included in this
-                                                    module
-                                                    to perform model creation and the estimation of yet to be classified documents.
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ol>
-                                </ol>
-                                <p>Here we have implemented four algorithms from the <strong>Apache Spark Mlib</strong>:</p>
-                                <ol>
-                                    <ol>
-                                        <ul>
-                                            <li>Linear Regression without validation.</li>
-                                            <li>Cross Validation.</li>
-                                            <li>Train Validation.</li>
-                                            <li>Multilayer Perceptron (an algorithm based on neural networks).</li>
-                                        </ul>
-                                    </ol>
-                                </ol>
-                                <p><strong>It also is connected to Apache ActiveMQ, which allows other modules to ask for jobs that are being
-                                    performed and the return of their results.</strong></p>
-                                <ol>
-                                    <li><strong>Algorithm comparator</strong> – tests algorithms implemented in the processor for accuracy and
-                                        correctness. It uses Apache ActiveMQ to request results for all algorithms (one at the time) and then
-                                        compares
-                                        the algorithms’ accuracy. <strong>We used it to decouple the logic of algorithm comparison from the logic
-                                            of
-                                            algorithm execution.</strong> It also provides REST API for algorithms results visualization (charts).
+                                    <li><strong>Parameter's order:</strong> Now the error message, if occurs, is the last parameter, not the first.
                                     </li>
+                                    <li>
+                                        <strong>Message supplier:</strong>
+                                        Creating error messages can be sometimes expensive and time consuming. Now you can add a supplier so that
+                                        message will be constructed only if needed.
+                                    </li>
+                                    <pre class="prettyprint linenums"><code class="language-java">
+package com.pgs.junit5.examples;
+
+import lombok.extern.log4j.Log4j2;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@Log4j2
+public class E01NewAssertEqualsOrderTest {
+
+    @Test
+    void shouldFind3Differences() {
+        short expected = 3;
+        short actual = 3;
+
+        // Providing error message at the end
+        assertEquals(expected, actual, getAssertionMessage());
+    }
+
+    @Test
+    void shouldFind3DifferencesWithMessageSupplier() {
+        short expected = 3;
+        short actual = 3;
+
+        // Providing supplier of the error message (lazy string construction)
+        assertEquals(expected, actual, this::getAssertionMessage);
+    }
+
+    private String getAssertionMessage() {
+        try {
+            return new StringBuilder()
+                    .append("must")
+                    .append(" find")
+                    .append(" 3 differences")
+                    .toString();
+        } finally {
+            log.debug("assertion message has been computed. it was hard work.");
+        }
+    }
+}
+                                    </code></pre>
                                 </ol>
-                                <p><strong><br/>
-                                    We came up with following Cassandra schema:</strong></p>
-                                <p>
-                                <center><a href="https://www.pgs-soft.com/wp-content/uploads/2016/10/Cassandra-schema.jpg"><img
-                                        class="alignnone size-full wp-image-16979"
-                                        src="https://www.pgs-soft.com/wp-content/uploads/2016/10/Cassandra-schema.jpg" alt="cassandra-schema"
-                                        width="519" height="386"
-                                        srcset="https://www.pgs-soft.com/wp-content/uploads/2016/10/Cassandra-schema.jpg 519w, https://www.pgs-soft.com/wp-content/uploads/2016/10/Cassandra-schema-300x223.jpg 300w, https://www.pgs-soft.com/wp-content/uploads/2016/10/Cassandra-schema-305x227.jpg 305w"
-                                        sizes="(max-width: 519px) 100vw, 519px"/></a><br/>
-                                    <small>Database Schema</small>
-                                </center>
-                                &nbsp;</p>
-                                <ul>
-                                    <li><strong>Search profiles</strong> – profiles for filtering data predefined by the user.</li>
-                                    <li><strong>Search criteria </strong>– for a given profile, we can define multiple criteria which serve as
-                                        “and”
-                                        relationships.
-                                    </li>
-                                    <li><strong>Documents </strong>– our data crawled/imported from the official repository lands here.</li>
-                                    <li><strong>Results</strong> – after filtering, using a given search profile, all documents which match our
-                                        predefined criteria have their representation in this table. The training process and classification of
-                                        validation data are also performed in this table.
-                                    </li>
-                                    <li><strong>Classification groups</strong> – a table for algorithm comparison, only the comparison module uses
-                                        this one, the rest of the modules are not aware of it. We store the classification of given result
-                                        performed
-                                        by all of our algorithms here.
-                                    </li>
-                                    <li><strong>Algorithm accuracy </strong>– we store the estimated accuracy for all algorithms here.</li>
-                                </ul>
-                                <p>Probably many of you noticed that we&#8217;re using <strong>NoSQL database with a relational schema</strong>.
-                                    We
-                                    have a reason for it. Relations are used for our presentation layer. Having them in one database with data for
-                                    Spark calculations makes our life easier when developing web part of our application and doing experiments for
-                                    the
-                                    next part of this article. (Please, keep in mind, that if our solution would be implemented on production,
-                                    database infrastructure should be split into a relational and non-relational part.)</p>
-                                <p>We also have a pretty standard schema for handling users, authentication, etc.</p>
-                                <h2>System flows</h2>
-                                <p style="text-align: center;"><a
-                                        href="https://www.pgs-soft.com/wp-content/uploads/2016/10/processor-e1476256098991.png"><img
-                                        class="alignnone size-full wp-image-16984"
-                                        src="https://www.pgs-soft.com/wp-content/uploads/2016/10/processor-e1476256098991.png" alt="processor"
-                                        width="1591" height="778"
-                                        srcset="https://www.pgs-soft.com/wp-content/uploads/2016/10/processor-e1476256098991.png 1591w, https://www.pgs-soft.com/wp-content/uploads/2016/10/processor-e1476256098991-300x147.png 300w, https://www.pgs-soft.com/wp-content/uploads/2016/10/processor-e1476256098991-768x376.png 768w, https://www.pgs-soft.com/wp-content/uploads/2016/10/processor-e1476256098991-1024x501.png 1024w, https://www.pgs-soft.com/wp-content/uploads/2016/10/processor-e1476256098991-305x149.png 305w"
-                                        sizes="(max-width: 1591px) 100vw, 1591px"/></a><br/>
-                                    <small>Processor flow diagram</small>
-                                </p>
-                                <p style="text-align: center;"><a
-                                        href="https://www.pgs-soft.com/wp-content/uploads/2016/10/crawler-e1476255994940.png"><img
-                                        class="alignnone size-full wp-image-16981"
-                                        src="https://www.pgs-soft.com/wp-content/uploads/2016/10/crawler-e1476255994940.png" alt="crawler"
-                                        width="1591" height="589"
-                                        srcset="https://www.pgs-soft.com/wp-content/uploads/2016/10/crawler-e1476255994940.png 1591w, https://www.pgs-soft.com/wp-content/uploads/2016/10/crawler-e1476255994940-300x111.png 300w, https://www.pgs-soft.com/wp-content/uploads/2016/10/crawler-e1476255994940-768x284.png 768w, https://www.pgs-soft.com/wp-content/uploads/2016/10/crawler-e1476255994940-1024x379.png 1024w, https://www.pgs-soft.com/wp-content/uploads/2016/10/crawler-e1476255994940-305x113.png 305w"
-                                        sizes="(max-width: 1591px) 100vw, 1591px"/></a><br/>
-                                    <small>Crawler flow diagram</small>
-                                </p>
-                                <p style="text-align: center;"><a
-                                        href="https://www.pgs-soft.com/wp-content/uploads/2016/10/algorithm-comparator-e1476256031748.png"><img
-                                        class="aligncenter size-full wp-image-16980"
-                                        src="https://www.pgs-soft.com/wp-content/uploads/2016/10/algorithm-comparator-e1476256031748.png"
-                                        alt="algorithm-comparator" width="1591" height="614"
-                                        srcset="https://www.pgs-soft.com/wp-content/uploads/2016/10/algorithm-comparator-e1476256031748.png 1591w, https://www.pgs-soft.com/wp-content/uploads/2016/10/algorithm-comparator-e1476256031748-300x116.png 300w, https://www.pgs-soft.com/wp-content/uploads/2016/10/algorithm-comparator-e1476256031748-768x296.png 768w, https://www.pgs-soft.com/wp-content/uploads/2016/10/algorithm-comparator-e1476256031748-1024x395.png 1024w, https://www.pgs-soft.com/wp-content/uploads/2016/10/algorithm-comparator-e1476256031748-305x118.png 305w"
-                                        sizes="(max-width: 1591px) 100vw, 1591px"/></a><br/>
-                                    <small>Algorithm Comparator flow diagram</small>
-                                </p>
-                                <h2>Basic learning flow for algorithms:</h2>
-                                <p style="text-align: center;"><a
-                                        href="https://www.pgs-soft.com/wp-content/uploads/2016/10/gfx-learning-e1476687077570.png"><img
-                                        src="https://www.pgs-soft.com/wp-content/uploads/2016/10/gfx-learning-e1476687077570-1024x308.png"
-                                        alt="gfx-learning" width="1024" height="308" class="aligncenter size-large wp-image-17099"
-                                        srcset="https://www.pgs-soft.com/wp-content/uploads/2016/10/gfx-learning-e1476687077570-1024x308.png 1024w, https://www.pgs-soft.com/wp-content/uploads/2016/10/gfx-learning-e1476687077570-300x90.png 300w, https://www.pgs-soft.com/wp-content/uploads/2016/10/gfx-learning-e1476687077570-768x231.png 768w, https://www.pgs-soft.com/wp-content/uploads/2016/10/gfx-learning-e1476687077570-305x92.png 305w, https://www.pgs-soft.com/wp-content/uploads/2016/10/gfx-learning-e1476687077570.png 1591w"
-                                        sizes="(max-width: 1024px) 100vw, 1024px"/></a><br/>
-                                    <small>Basic learning flow for algorithms</small>
-                                </p>
-                                <p>Raw text is split into words, the words are then converted into feature vectors which contain more information
-                                    than
-                                    just words, such as the count of occurrences. Our learning algorithms use these vectors with another data
-                                    classification, represented as a floating point number, to create the model for our training data. When the
-                                    model
-                                    is finished it is ready to predict classifications for newly arrived data. It provides the prediction of
-                                    classification as a number and our code’s job is to provide an interpretation for it by converting the number
-                                    to a
-                                    classification.</p>
-                                <p>The source code for this project is hosted on our <a
-                                        href="https://github.com/PGSSoft/pgs-blog/tree/master/SparkProject">GitHub</a> repository.</p>
-                                <h2>Summary</h2>
-                                <p>We developed a completely functional system which is capable of gathering data, preparing it for training as
-                                    well
-                                    as estimating a model using prepared data. We’re still playing around with it, checking what we can gain using
-                                    real data. Curious about the results? Stay tuned! The second part of our article will appear soon.</p>
+
                                 <ul class="social-media-share">
                                     <li><a class="facebook"
                                            href="https://www.facebook.com/sharer.php?u=https://www.pgs-soft.com/big-data-and-machine-learning-with-apache-spark-and-cassandra-part-1-architecture/&amp;t=Big+data+and+machine+learning+with+Apache+Spark+and+Cassandra+Part+1+%E2%80%93+Architecture"
