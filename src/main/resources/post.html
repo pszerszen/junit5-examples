@@ -768,6 +768,40 @@ org.opentest4j.MultipleFailuresError: collection (2 failures)
 	Size must be 3 ==> expected: <3> but was: <2>
 	AAA element must be first ==> expected: <AZZ> but was: <AAA>
                                     </xmp></pre>
+                                    <li><strong>New approach for testing exceptions:</strong>We don't need to "tribute" a whole method for testing a
+                                        single exception. Now exceptions are tested by using <code>assertThrows()</code> method which returns a cached
+                                        Throwable.
+                                    </li>
+                                    <pre class="prettyprint linenums"><code class="language-java">
+package com.pgs.junit5.examples;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+public class E05ExceptionsTestingTest {
+
+    @Test
+    public void shouldThrowException() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new Generator().generate("AAAE", 0));
+    }
+
+    @Test
+    public void shouldThrowExceptionWithMessage() {
+        Throwable throwable = assertThrows(IllegalArgumentException.class,
+                () -> new Generator().generate(null, 0));
+
+        assertEquals("parameter must not be null", throwable.getMessage());
+    }
+
+}
+                                    </code></pre>
+                                    <li><strong>Custom test names:</strong>If we wish to we can add a custom name for a test with
+                                        <code>@DisplayName</code> annotation so that provided value will be displayed as a name instead of method's
+                                        name.
+                                    </li>
 
                                 </ol>
 
