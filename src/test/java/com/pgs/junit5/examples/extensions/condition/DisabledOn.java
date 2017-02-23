@@ -14,6 +14,5 @@ import java.time.DayOfWeek;
 @Documented
 @ExtendWith(DisabledOnCondition.class)
 public @interface DisabledOn {
-
     DayOfWeek[] value() default {DayOfWeek.FRIDAY};
 }

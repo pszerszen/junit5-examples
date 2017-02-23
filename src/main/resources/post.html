@@ -1062,7 +1062,216 @@ org.opentest4j.MultipleFailuresError: result (1 failure)
 	expected:<"aa[b]"> but was:<"aa[a]">
 ...
                                     </xmp></pre>
+                                    <p>ExecutionConditions lets you to decide if test should be run or not. For example I created an annotation
+                                        letting to decide on which days of a week the test or test container should be skipped.</p>
+                                    <pre class="prettyprint linenums"><code class="language-java">
+package com.pgs.junit5.examples.extensions.condition;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.junit.jupiter.api.extension.ConditionEvaluationResult;
+import org.junit.jupiter.api.extension.ContainerExecutionCondition;
+import org.junit.jupiter.api.extension.ContainerExtensionContext;
+import org.junit.jupiter.api.extension.TestExecutionCondition;
+import org.junit.jupiter.api.extension.TestExtensionContext;
+
+import java.lang.reflect.AnnotatedElement;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Optional;
+
+import static org.junit.platform.commons.util.AnnotationUtils.findAnnotation;
+
+public class DisabledOnCondition implements ContainerExecutionCondition, TestExecutionCondition {
+
+    private static final ConditionEvaluationResult ENABLED = ConditionEvaluationResult.enabled(
+            "@DisabledOnFriday is not present");
+
+    @Override
+    public ConditionEvaluationResult evaluate(ContainerExtensionContext context) {
+        return evaluate(context.getElement());
+    }
+
+    @Override
+    public ConditionEvaluationResult evaluate(TestExtensionContext context) {
+        return evaluate(context.getElement());
+    }
+
+    private ConditionEvaluationResult evaluate(Optional<AnnotatedElement> element) {
+        return findAnnotation(element, DisabledOn.class)
+                .map(DisabledOn::value)
+                .filter(dayOfWeeks -> ArrayUtils.contains(dayOfWeeks, LocalDateTime.now().getDayOfWeek()))
+                .map(dayOfWeeks -> element.get() + " is disabled on " + Arrays.toString(dayOfWeeks))
+                .map(ConditionEvaluationResult::disabled)
+                .orElse(ENABLED);
+    }
+}
+                                    </code></pre>
+                                    <pre class="prettyprint linenums"><code class="language-java">
+package com.pgs.junit5.examples.extensions.condition;
+
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.time.DayOfWeek;
+
+@Target({ ElementType.TYPE, ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@ExtendWith(DisabledOnCondition.class)
+public @interface DisabledOn {
+    DayOfWeek[] value() default {DayOfWeek.FRIDAY};
+}
+                                    </code></pre>
+                                    <p>This test will be skipped during weekend. Because why would we spoil it with a stress? ;)</p>
+                                    <pre class="prettyprint linenums"><code class="language-java">
+package com.pgs.junit5.examples;
+
+import com.pgs.junit5.examples.extensions.callback.Benchmark;
+import com.pgs.junit5.examples.extensions.condition.DisabledOn;
+import com.pgs.junit5.examples.extensions.tags.Special;
+import lombok.extern.log4j.Log4j2;
+import org.junit.jupiter.api.Test;
+
+import java.time.DayOfWeek;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@Log4j2
+@Benchmark
+@Special
+@DisabledOn({DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY})
+public class SomeAwkwardTest {
+
+    @Test
+    void assertThatResultIsNotEmpty() {
+        assertThat("s").isEmpty();
+        log.warn("executed");
+    }
+}
+                                    </code></pre>
+                                    <li><strong>Using Mockito:</strong>Of course where is jUnit, sooner or later Mockito will be needed as well.
+                                        Without <code>MockitoJUnitRunner</code> it might be a bit painful so why not use an Extension here too? This
+                                        Extension will take care of initializing fields annotated with <code>@Mock</code>:
+                                    </li>
+                                    <pre class="prettyprint linenums"><code class="language-java">
+package com.pgs.junit5.examples.extensions;
+
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.TestInstancePostProcessor;
+import org.mockito.MockitoAnnotations;
+
+public class MockitoExtension implements TestInstancePostProcessor {
+
+    @Override
+    public void postProcessTestInstance(Object testInstance, ExtensionContext context) {
+        MockitoAnnotations.initMocks(testInstance);
+    }
+}
+                                    </code></pre>
+                                    <p>And usage example:</p>
+                                    <pre class="prettyprint linenums"><code class="language-java">
+package com.pgs.junit5.examples;
+
+import com.pgs.junit5.examples.extensions.MockitoExtension;
+import com.pgs.junit5.examples.extensions.tags.Special;
+import org.apache.commons.lang3.tuple.Pair;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
+@Special
+@ExtendWith(MockitoExtension.class)
+public class E07MockitoTest {
+
+    @Mock
+    private Pair<String, String> pair;
+
+    @BeforeEach
+    void setUp() {
+        when(pair.getKey()).thenReturn("key");
+        when(pair.getValue()).thenReturn("val");
+    }
+
+    @Test
+    void test() {
+        assertEquals("key", pair.getKey());
+        assertEquals("val", pair.getValue());
+    }
+}
+                                    </code></pre>
+                                    <li><strong>Tagging:</strong>For the end I saved something <u>special</u>. You probably noticed that some tests
+                                        has been annotated with <code>@Special</code>. JUnit 5 lets you to mark tests with various tags and run them
+                                        filtering by these tags (by including or excluding).
+                                    </li>
+                                    <pre class="prettyprint linenums"><code class="language-java">
+package com.pgs.junit5.examples.extensions.tags;
+
+import org.junit.jupiter.api.Tag;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
+
+@Target({ TYPE, METHOD, ANNOTATION_TYPE })
+@Retention(RetentionPolicy.RUNTIME)
+@Tag("special")
+public @interface Special {
+}
+                                    </code></pre>
+                                    <p>Maven profile picking <code>@Special</code> tests:</p>
+                                    <pre class="prettyprint linenums:137"><xmp class="language-xml">
+    <profile>
+        <id>special-tests</id>
+        <build>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.19.1</version>
+                    <configuration>
+                        <includes>
+                            <include>**/*Test.java</include>
+                        </includes>
+                        <properties>
+                            <includeTags>special</includeTags>
+                        </properties>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.junit.platform</groupId>
+                            <artifactId>junit-platform-surefire-provider</artifactId>
+                            <version>LATEST</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.junit.jupiter</groupId>
+                            <artifactId>junit-jupiter-engine</artifactId>
+                            <version>LATEST</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.junit.vintage</groupId>
+                            <artifactId>junit-vintage-engine</artifactId>
+                            <version>LATEST</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+            </plugins>
+        </build>
+    </profile>
+                                    </xmp></pre>
                                 </ol>
+                                <p>Whole code with examples is accessible <a href="https://github.com/pszerszen/junit5-examples">here</a>. I hope you
+                                    enjoyed this article and feel encouraged to try out jUnit 5 in your current and future projects.</p>
 
                                 <ul class="social-media-share">
                                     <li><a class="facebook"
