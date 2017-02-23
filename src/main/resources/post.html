@@ -533,7 +533,7 @@ public class VintageTest {
                                 </code></pre>
                                 <p><strong>What's new? What's different?</strong></p>
                                 <ol>
-                                    <li><strong>Methods can be package-private:</strong>Yes, no need to typing <code>public</code> all the time ano
+                                    <li><strong>Methods can be package-private:</strong>Yes, no need to typing <code>public</code> all the time any
                                         more.
                                     </li>
                                     <li><strong>Parameter's order:</strong> Now the error message, if occurs, is the last parameter, not the first.
@@ -802,7 +802,154 @@ public class E05ExceptionsTestingTest {
                                         <code>@DisplayName</code> annotation so that provided value will be displayed as a name instead of method's
                                         name.
                                     </li>
+                                    <li><strong>Test Factory:</strong>A method annotated with <code>@TestFactory</code> should return Stream,
+                                        Collection, Iterable or Iterator of <code>DynamicTest</code> instances. Each dynamic test can be treated as a
+                                        single test case run lazily. This way we can parametrize only specific test methods.<br/>
+                                        We can think of it as a replacement of <code>Parametrized</code> runner. In fact in JUnit 5 there are no
+                                        Runners at all.
+                                    </li>
+                                    <pre class="prettyprint linenums"><code class="language-java">
+package com.pgs.junit5.examples;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestFactory;
+
+import java.util.stream.Stream;
+
+import static java.lang.String.format;
+import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.DynamicTest.dynamicTest;
+
+public class E06DynamicTest {
+
+    @TestFactory
+    Stream<DynamicTest> fibonacciTestFactory() {
+        return Stream.of(
+                params(0, 0),
+                params(1, 1),
+                params(2, 1),
+                params(3, 2),
+                params(4, 3),
+                params(5, 5),
+                params(6, 8))
+                .map(this::callTest);
+    }
+
+    private DynamicTest callTest(Pair<Integer, Integer> params) {
+        return test(params.getKey(), params.getValue());
+    }
+
+    private DynamicTest test(final int input, final int expected) {
+        return dynamicTest(format("input={%d}, expected={%d}", input, expected),
+                () -> assertEquals(expected, Fibonacci.compute(input)));
+    }
+
+    private Pair<Integer, Integer> params(int input, int expected) {
+        return ImmutablePair.of(input, expected);
+    }
+
+    @Test
+    @DisplayName("Test not needing parameters.")
+    public void test2() {
+    }
+
+}
+                                    </code></pre>
+                                    <li><strong>Extensions:</strong>As I said before, there are no Runners in jUnit 5. Extensions are their general
+                                        replacement. They actually lets you to do a lot of interesting tricks. You are able to create an Extension
+                                        from following interfaces:
+                                        <ul>
+                                            <li><code>ContainerExecutionCondition</code></li>
+                                            <li><code>TestExecutionCondition</code></li>
+                                            <li><code>BeforeAllCallback</code></li>
+                                            <li><code>AfterAllCallback</code></li>
+                                            <li><code>BeforeEachCallback</code></li>
+                                            <li><code>AfterEachCallback</code></li>
+                                            <li><code>BeforeTestExecutionCallback</code></li>
+                                            <li><code>AfterTestExecutionCallback</code></li>
+                                            <li><code>TestInstancePostProcessor</code></li>
+                                            <li><code>ParameterResolver</code></li>
+                                            <li><code>TestExecutionExceptionHandler</code></li>
+                                        </ul>
+                                    </li>
+                                    <p><strong>ParameterResolver</strong> lets you to define parameters that will be later passed directly to methods
+                                        annotated with any of <code>@Test, @TestFactory, @BeforeEach, @AfterEach, @BeforeAll, @AfterAll</code>. So the
+                                        the test shown in the previous snippet could be made with a little bit more of finesse:</p>
+                                    <pre class="prettyprint linenums"><code class="language-java">
+package com.pgs.junit5.examples;
+
+import com.pgs.junit5.examples.extensions.tags.Special;
+import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.ParameterContext;
+import org.junit.jupiter.api.extension.ParameterResolutionException;
+import org.junit.jupiter.api.extension.ParameterResolver;
+
+import java.util.stream.Stream;
+
+import static java.lang.String.format;
+import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.DynamicTest.dynamicTest;
+
+@Log4j2
+public class E06ParametrizedTest {
+
+    @TestFactory
+    @ExtendWith(FibonacciParameterResolver.class)
+    Stream<DynamicTest> test(Stream<Pair<Integer, Integer>> dataSet) {
+        return dataSet.map(pair -> test(pair.getKey(), pair.getValue()));
+    }
+
+    private DynamicTest test(final int input, final int expected) {
+        return dynamicTest(format("input={%d}, expected={%d}", input, expected),
+                () -> assertEquals(expected, Fibonacci.compute(input)));
+    }
+
+    @Test
+    @Special
+    @DisplayName("Test not needing parameters.")
+    public void test2() {
+    }
+
+    private static class FibonacciParameterResolver implements ParameterResolver {
+
+        @Override
+        public boolean supports(final ParameterContext parameterContext, final ExtensionContext extensionContext) throws ParameterResolutionException {
+            return parameterContext.getParameter().getType().equals(Stream.class);
+        }
+
+        @Override
+        public Object resolve(final ParameterContext parameterContext, final ExtensionContext extensionContext) throws ParameterResolutionException {
+            return Stream.of(
+                    params(0, 0),
+                    params(1, 1),
+                    params(2, 1),
+                    params(3, 2),
+                    params(4, 3),
+                    params(5, 5),
+                    params(6, 8));
+        }
+
+        private Pair<Integer, Integer> params(int input, int expected) {
+            return ImmutablePair.of(input, expected);
+        }
+    }
+}
+                                    </code></pre>
+                                    <p>Method <code>supports()</code> resolves whether the ParameterResolver should be used and <code>resolve()</code>
+                                        method returns the value of the parameter.</p><br/>
+                                    <p></p>
                                 </ol>
 
                                 <ul class="social-media-share">
