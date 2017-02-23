@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @Benchmark
 public class GeneratorTest {
-    @DisplayName("when input is correct")
     @Nested
+    @DisplayName("when input is correct")
     class WhenInputIsCorrect {
 
         @Test
@@ -21,8 +21,7 @@ public class GeneratorTest {
 
             assertAll(
                     () -> assertThat(actual).isEqualTo("aaa"),
-                    () -> assertThat(actual).isEqualTo("aaa")
-            );
+                    () -> assertThat(actual).isEqualTo("aaa"));
         }
 
         @Test
@@ -34,6 +33,5 @@ public class GeneratorTest {
                     () -> assertThat(actual).isEqualTo("aab"),
                     () -> assertThat(actual).isEqualTo("aaa"));
         }
-
     }
 }

@@ -949,7 +949,119 @@ public class E06ParametrizedTest {
                                     </code></pre>
                                     <p>Method <code>supports()</code> resolves whether the ParameterResolver should be used and <code>resolve()</code>
                                         method returns the value of the parameter.</p><br/>
-                                    <p></p>
+                                    <p>The *Callback interfaces lets you define some generic behaviour before and/or after specific methods and re-use
+                                        it annotation.</p>
+                                    <pre class="prettyprint linenums"><code class="language-java">
+package com.pgs.junit5.examples.extensions.callback;
+
+import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
+import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.TestExtensionContext;
+
+import java.util.Collections;
+import java.util.Map;
+
+public class BenchmarkExtension implements BeforeTestExecutionCallback, AfterTestExecutionCallback {
+    @Override
+    public void afterTestExecution(final TestExtensionContext context) throws Exception {
+        long elapsed = System.currentTimeMillis() - getStore(context).remove(context.getTestMethod().get(), long.class);
+        String message = String.format("Test %s took %d ms.%n", context.getTestMethod().get().getName(), elapsed);
+        context.publishReportEntry(
+                createMapWithPair("Benchmark", message));
+    }
+
+    @Override
+    public void beforeTestExecution(final TestExtensionContext context) throws Exception {
+        getStore(context).put(context.getTestMethod().get(), System.currentTimeMillis());
+    }
+
+    private Map<String, String> createMapWithPair(String key, String message) {
+        return Collections.singletonMap(key, message);
+    }
+
+    private ExtensionContext.Store getStore(TestExtensionContext context) {
+        return context.getStore(ExtensionContext.Namespace.create(getClass(), context));
+    }
+}
+                                    </code></pre>
+                                    <pre class="prettyprint linenums"><code class="language-java">
+package com.pgs.junit5.examples.extensions.callback;
+
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
+
+@Target({ TYPE, METHOD, ANNOTATION_TYPE })
+@Retention(RetentionPolicy.RUNTIME)
+@ExtendWith(BenchmarkExtension.class)
+@Tag("benchmark")
+public @interface Benchmark {
+}
+                                    </code></pre>
+                                    <pre class="prettyprint linenums"><code class="language-java">
+package com.pgs.junit5.examples;
+
+import com.pgs.junit5.examples.extensions.callback.Benchmark;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
+@Benchmark
+public class GeneratorTest {
+    @Nested
+    @DisplayName("when input is correct")
+    class WhenInputIsCorrect {
+
+        @Test
+        @DisplayName("then generator returns combinations")
+        void shouldGenerateCombinations() {
+            String actual = "aaa";
+
+            assertAll(
+                    () -> assertThat(actual).isEqualTo("aaa"),
+                    () -> assertThat(actual).isEqualTo("aaa"));
+        }
+
+        @Test
+        @DisplayName("then generator returns combinations - expected to fail")
+        void shouldGenerateCombinationsFail() {
+            String actual = "aaa";
+
+            assertAll("result",
+                    () -> assertThat(actual).isEqualTo("aab"),
+                    () -> assertThat(actual).isEqualTo("aaa"));
+        }
+    }
+}
+                                    </code></pre>
+                                    <pre class="prettyprint linenums" style="font-size: 9px"><xmp>
+timestamp = 2017-02-23T22:33:04.132, Benchmark = Test shouldGenerateCombinations took 163 ms.
+
+timestamp = 2017-02-23T22:33:04.164, Benchmark = Test shouldGenerateCombinationsFail took 9 ms.
+
+
+
+Expected :"aab"
+Actual   :"aaa"
+ <Click to see difference>
+
+
+
+org.opentest4j.MultipleFailuresError: result (1 failure)
+	expected:<"aa[b]"> but was:<"aa[a]">
+...
+                                    </xmp></pre>
                                 </ol>
 
                                 <ul class="social-media-share">
