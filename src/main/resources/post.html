@@ -753,8 +753,8 @@ org.opentest4j.MultipleFailuresError: collection (2 failures)
                                     <li><strong>New approach for testing exceptions:</strong>We don't need to "tribute" a whole method for testing a
                                         single exception. Now exceptions are tested by using <code>assertThrows()</code> method which returns a
                                         catched Throwable. A new <code>@Test</code> annotation doesn't let to specify expected Exception or timeout.
-                                        Everything is being asserted in method body. This makes much easier to test error messages and - thanks to
-                                        that - track the spot where the exception were thrown in case the same exception can be thrown in multiple
+                                        Everything is being asserted within method body. This makes it much easier to test error messages and - thanks
+                                        to that - track the spot where the exception were thrown in case the same exception can be thrown in multiple
                                         places in a method. I hope having better conditions to test all the edge cases developers will be more eager
                                         to do it now.
                                     </li>
