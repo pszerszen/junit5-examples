@@ -566,7 +566,8 @@ public class E01NewAssertEqualsOrderTest {
 }
                                     </code></pre>
                                     <li><strong>New lifecycle names:</strong>Annotation names has been changed. I think mostly for easier sensing the
-                                        difference when project contains tests using both JUnits. <br/> Here is how it changed:
+                                        difference when project contains tests using both JUnits. Besides that a new names seems to be more accurate
+                                        and human-friendly comparing to previous version.<br/> Here is how it changed:
                                         <ul>
                                             <li><code>@BeforeClass</code> --> <code>@BeforeAll</code></li>
                                             <li><code>@Before</code> --> <code>@BeforeEach</code></li>
@@ -717,7 +718,8 @@ public class E03LifecycleInheritanceDemoTest {
                                     </pre>
                                     <li><strong>Group assertion:</strong>We can put multiple assertions in one <code>assertAll()</code> method. This
                                         will force to execute all the assertions in group instead of exiting after the first fail. Thanks to this we
-                                        can have aggregated report of failing assertions.
+                                        can have aggregated report of failing assertions. This feature certainly will save us some time of re-running
+                                        and debugging failing assertions as the first fail won't force the end of the test run.
                                     </li>
                                     <pre class="prettyprint linenums"><code class="language-java">
 package com.pgs.junit5.examples;
@@ -749,8 +751,12 @@ org.opentest4j.MultipleFailuresError: collection (2 failures)
 	AAA element must be first ==> expected: <AZZ> but was: <AAA>
                                     </xmp></pre>
                                     <li><strong>New approach for testing exceptions:</strong>We don't need to "tribute" a whole method for testing a
-                                        single exception. Now exceptions are tested by using <code>assertThrows()</code> method which returns a cached
-                                        Throwable.
+                                        single exception. Now exceptions are tested by using <code>assertThrows()</code> method which returns a
+                                        catched Throwable. A new <code>@Test</code> annotation doesn't let to specify expected Exception or timeout.
+                                        Everything is being asserted in method body. This makes much easier to test error messages and - thanks to
+                                        that - track the spot where the exception were thrown in case the same exception can be thrown in multiple
+                                        places in a method. I hope having better conditions to test all the edge cases developers will be more eager
+                                        to do it now.
                                     </li>
                                     <pre class="prettyprint linenums"><code class="language-java">
 package com.pgs.junit5.examples;
